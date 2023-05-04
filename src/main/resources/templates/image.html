@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Image properties</h1>
+    <p th:text="'description: ' + ${image.description}">Opis obrazka</p>
+    <p th:text="'status: ' + ${image.status}">Status</p>
+    <p th:text="'submittedDate: ' + ${image.submittedDate}">submittedDate</p>
+    <img class="picture" th:src="@{picture}">
+
+</div>
+</body>
+</html>
