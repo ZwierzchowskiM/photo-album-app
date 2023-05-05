@@ -1,6 +1,7 @@
 package pl.zwierzchowski.marcin.app.photoalbum.service;
 
 import org.springframework.stereotype.Service;
+import pl.zwierzchowski.marcin.app.photoalbum.enums.Status;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.PhotoRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
 
@@ -27,6 +28,7 @@ public class PhotoService {
         photo.setSubmittedDate(LocalDateTime.now());
         photo.setDescription(name);
         photo.setFileUniqueName(S3address);
+        photo.setStatus(Status.SUBMITTED);
 
         return photoRepository.save(photo);
 
