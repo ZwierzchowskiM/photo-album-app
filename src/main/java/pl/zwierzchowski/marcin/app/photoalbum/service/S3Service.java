@@ -1,6 +1,5 @@
 package pl.zwierzchowski.marcin.app.photoalbum.service;
 
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,30 +24,23 @@ public class S3Service {
     private String accessKey;
     @Value("${secret}")
     private String secret;
-
     @Value("${bucketName}")
     private String bucketName;
 
-
-    // Create the S3Client object.
     private S3Client getClient() {
-
         Region region = Region.EU_NORTH_1;
         S3Client s3 = S3Client.builder()
                 .region(region)
                 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secret)))
                 .region(region)
                 .build();
-
         return s3;
     }
 
     public String putObject(MultipartFile file) {
 
         s3 = getClient();
-
         isFileEmpty(file);
-
         String objectKey = String.format("%s-%s", file.getOriginalFilename(), UUID.randomUUID());
 
         try {
@@ -68,7 +60,6 @@ public class S3Service {
             e.printStackTrace();
             return "";
         }
-
         return null;
     }
 
@@ -114,7 +105,6 @@ public class S3Service {
         }
     }
 
-
     public void createBucket(String bucketName) {
 
         S3Client s3Client = getClient();
@@ -135,17 +125,18 @@ public class S3Service {
         }
     }
 
+    private void isFileEmpty(MultipartFile file) {
+
+        if (file.isEmpty()) {
+            throw new IllegalStateException("Cannot upload empty file [ " + file.getSize() + "]");
+        }
+    }
+
     private void isImage(MultipartFile file) {
 
         String contentType = file.getContentType();
         if (!(contentType.equals("image/png") || contentType.equals("image/jpg") || contentType.equals("image/jpeg"))) {
             throw new IllegalStateException("File must be an image [" + file.getContentType() + "]");
-        }
-    }
-
-    private void isFileEmpty(MultipartFile file) {
-        if (file.isEmpty()) {
-            throw new IllegalStateException("Cannot upload empty file [ " + file.getSize() + "]");
         }
     }
 
