@@ -3,6 +3,7 @@ package pl.zwierzchowski.marcin.app.photoalbum.repository.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import pl.zwierzchowski.marcin.app.photoalbum.enums.Status;
 
 import java.time.LocalDateTime;
 
@@ -23,9 +24,9 @@ public class PhotoEntity {
     @ManyToOne
     private UserEntity reviewer;
     private LocalDateTime submittedDate;
+    private Status status;
 
     public PhotoEntity() {
     }
-
 
 }
