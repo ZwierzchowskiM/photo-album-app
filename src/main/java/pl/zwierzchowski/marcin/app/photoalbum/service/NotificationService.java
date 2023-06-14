@@ -5,15 +5,15 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.Email;
 import java.nio.charset.StandardCharsets;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
-@Service
+
+@Component
 public class NotificationService {
 
     @Value("${spring.mail.username}")

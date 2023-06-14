@@ -36,7 +36,6 @@ public class ReviewService {
         PhotoEntity photoEntity = photoRepository.findById(reviewModel.getPhotoId()).orElseThrow();
 
         reviewEntity.setPhotoEntity(photoEntity);
-        reviewEntity.setText(reviewModel.getText());
         reviewEntity.setCreatedDate(ZonedDateTime.now());
 
         ReviewEntity savedReview = reviewRepository.save(reviewEntity);
