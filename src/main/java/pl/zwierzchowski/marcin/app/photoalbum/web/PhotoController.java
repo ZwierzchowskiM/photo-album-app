@@ -21,8 +21,8 @@ public class PhotoController {
         this.photoService = photoService;
     }
 
-    @PostMapping("/save")
-    public PhotoEntity createPhoto(@RequestParam("file") MultipartFile file, String description) {
+    @PostMapping("/upload")
+    public PhotoEntity uploadPhoto(@RequestParam("file") MultipartFile file, String description) {
 
         String S3address = "";
         S3address = s3Service.putObject(file);

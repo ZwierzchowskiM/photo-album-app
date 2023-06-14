@@ -1,17 +1,48 @@
 package pl.zwierzchowski.marcin.app.photoalbum.service;
 
 import org.springframework.stereotype.Service;
+import pl.zwierzchowski.marcin.app.photoalbum.repository.PhotoRepository;
+import pl.zwierzchowski.marcin.app.photoalbum.repository.ReviewRepository;
+import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
+import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.ReviewEntity;
+import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.UserEntity;
+import pl.zwierzchowski.marcin.app.photoalbum.service.mapper.ReviewMapper;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.ReviewModel;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
 public class ReviewService {
 
+    private final ReviewRepository reviewRepository;
+    private final PhotoRepository photoRepository;
+    private final NotificationService notificationService;
+    private final ReviewMapper reviewMapper;
 
 
-    public ReviewModel create(ReviewModel car) {
-        return null;
+    public ReviewService(ReviewRepository reviewRepository, PhotoRepository photoRepository, NotificationService notificationService, ReviewMapper reviewMapper) {
+        this.reviewRepository = reviewRepository;
+        this.photoRepository = photoRepository;
+        this.notificationService = notificationService;
+        this.reviewMapper = reviewMapper;
+    }
+
+
+
+    public ReviewEntity create(ReviewModel reviewModel) {
+
+        ReviewEntity reviewEntity = reviewMapper.from(reviewModel);
+        PhotoEntity photoEntity = photoRepository.findById(reviewModel.getPhotoId()).orElseThrow();
+
+        reviewEntity.setPhotoEntity(photoEntity);
+        reviewEntity.setText(reviewModel.getText());
+        reviewEntity.setCreatedDate(ZonedDateTime.now());
+
+        ReviewEntity savedReview = reviewRepository.save(reviewEntity);
+
+        return savedReview;
+
     }
 
     public ReviewModel read(Integer id) {
