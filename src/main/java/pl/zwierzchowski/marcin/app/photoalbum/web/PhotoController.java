@@ -10,7 +10,7 @@ import pl.zwierzchowski.marcin.app.photoalbum.service.PhotoService;
 import pl.zwierzchowski.marcin.app.photoalbum.service.S3Service;
 
 @RestController
-@RequestMapping("${api.path}/photos")
+@RequestMapping("/photos")
 public class PhotoController {
 
     S3Service s3Service;
@@ -24,11 +24,8 @@ public class PhotoController {
     @PostMapping("/upload")
     public PhotoEntity uploadPhoto(@RequestParam("file") MultipartFile file, String description) {
 
-        String S3address = "";
-        S3address = s3Service.putObject(file);
+        PhotoEntity savedPhoto = photoService.save(file,description);
         System.out.println("You have placed file into the S3 bucket");
-
-        PhotoEntity savedPhoto = photoService.save(S3address, description);
 
         return savedPhoto;
     }
