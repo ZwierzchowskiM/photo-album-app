@@ -18,13 +18,13 @@ public class PhotoEntity {
     private Long id;
     private String fileName;
     private String description;
-    private String fileUniqueName;
+    private String objectKey;
     @ManyToOne
     private UserEntity user;
-    @ManyToOne
-    private UserEntity reviewer;
     private LocalDateTime submittedDate;
     private Status status;
+    @OneToOne
+    private ReviewEntity reviewResult;
 
     public PhotoEntity() {
     }

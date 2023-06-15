@@ -31,9 +31,10 @@ public class PhotoService {
         S3address = s3Service.putObject(file);
 
         PhotoEntity photo = new PhotoEntity();
+        photo.setFileName(file.getName());
         photo.setSubmittedDate(LocalDateTime.now());
         photo.setDescription(description);
-        photo.setFileUniqueName(S3address);
+        photo.setObjectKey(S3address);
         photo.setStatus(Status.SUBMITTED);
 
         return photoRepository.save(photo);

@@ -1,6 +1,7 @@
 package pl.zwierzchowski.marcin.app.photoalbum.service;
 
 import org.springframework.stereotype.Service;
+import pl.zwierzchowski.marcin.app.photoalbum.enums.Status;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.PhotoRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.ReviewRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
@@ -34,7 +35,8 @@ public class ReviewService {
 
         ReviewEntity reviewEntity = reviewMapper.from(reviewModel);
         PhotoEntity photoEntity = photoRepository.findById(reviewModel.getPhotoId()).orElseThrow();
-
+        photoEntity.setStatus(Status.COMPLETED);
+        photoEntity.setReviewResult(reviewEntity);
         reviewEntity.setPhotoEntity(photoEntity);
         reviewEntity.setCreatedDate(ZonedDateTime.now());
 

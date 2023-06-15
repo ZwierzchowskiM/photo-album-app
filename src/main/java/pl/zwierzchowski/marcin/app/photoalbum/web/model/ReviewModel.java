@@ -2,6 +2,7 @@ package pl.zwierzchowski.marcin.app.photoalbum.web.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.zwierzchowski.marcin.app.photoalbum.enums.Result;
 
 
 @Getter
@@ -9,6 +10,7 @@ import lombok.Setter;
 public class ReviewModel {
 
     private Long photoId;
-    private String text;
+    private Result result;
+    private String comment;
 
 }
