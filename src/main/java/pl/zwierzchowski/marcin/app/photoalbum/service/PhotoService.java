@@ -5,6 +5,9 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.zwierzchowski.marcin.app.photoalbum.enums.Status;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.PhotoRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
+import pl.zwierzchowski.marcin.app.photoalbum.service.mapper.PhotoMapper;
+import pl.zwierzchowski.marcin.app.photoalbum.service.mapper.ReviewMapper;
+import pl.zwierzchowski.marcin.app.photoalbum.web.model.PhotoModel;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -13,7 +16,8 @@ import java.util.Optional;
 public class PhotoService {
 
     private PhotoRepository photoRepository;
-    S3Service s3Service;
+    private S3Service s3Service;
+    private PhotoMapper photoMapper;
 
     public PhotoService(PhotoRepository photoRepository, S3Service s3Service) {
         this.photoRepository = photoRepository;
@@ -39,5 +43,13 @@ public class PhotoService {
 
         return photoRepository.save(photo);
 
+    }
+
+    public PhotoModel findPhotoById(Long id) {
+
+        PhotoEntity photoEntity = photoRepository.findById(id).orElseThrow();
+        PhotoModel photoModel = photoMapper.from(photoEntity);
+
+        return photoModel;
     }
 }

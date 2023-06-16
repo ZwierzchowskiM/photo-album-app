@@ -1,13 +1,12 @@
 package pl.zwierzchowski.marcin.app.photoalbum.web;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.PhotoService;
 import pl.zwierzchowski.marcin.app.photoalbum.service.S3Service;
+import pl.zwierzchowski.marcin.app.photoalbum.web.model.PhotoModel;
 
 @RestController
 @RequestMapping("/photos")
@@ -28,6 +27,14 @@ public class PhotoController {
         System.out.println("You have placed file into the S3 bucket");
 
         return savedPhoto;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PhotoModel> getPhoto(@PathVariable Long id) {
+
+        PhotoModel photo = photoService.findPhotoById(id);
+
+        return ResponseEntity.ok(photo);
     }
 
 
