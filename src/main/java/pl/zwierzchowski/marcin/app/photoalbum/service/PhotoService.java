@@ -52,4 +52,9 @@ public class PhotoService {
 
         return photoModel;
     }
+
+    public void deletePhoto(Long id) {
+        photoRepository.deleteById(id);
+    }
+
 }

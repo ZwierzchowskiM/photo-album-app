@@ -1,6 +1,9 @@
 package pl.zwierzchowski.marcin.app.photoalbum.service;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import pl.zwierzchowski.marcin.app.photoalbum.enums.Status;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.PhotoRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.ReviewRepository;
@@ -8,6 +11,7 @@ import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.ReviewEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.UserEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.mapper.ReviewMapper;
+import pl.zwierzchowski.marcin.app.photoalbum.web.model.PhotoModel;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.ReviewModel;
 
 import java.time.ZonedDateTime;
@@ -62,6 +66,18 @@ public class ReviewService {
     }
 
 
+    public ReviewModel findReviewById(Long id) {
+
+        ReviewEntity reviewEntity = reviewRepository.findById(id).orElseThrow();
+        ReviewModel reviewModel = reviewMapper.from(reviewEntity);
+
+        return reviewModel;
+    }
+
+
+    public void deleteReview(Long id) {
+        reviewRepository.deleteById(id);
+    }
 }
 
 

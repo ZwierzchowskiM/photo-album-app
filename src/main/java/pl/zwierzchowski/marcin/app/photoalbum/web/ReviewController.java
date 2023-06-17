@@ -1,12 +1,10 @@
 package pl.zwierzchowski.marcin.app.photoalbum.web;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.ReviewEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.ReviewService;
+import pl.zwierzchowski.marcin.app.photoalbum.web.model.PhotoModel;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.ReviewModel;
 
 @RestController
@@ -26,5 +24,19 @@ public class ReviewController {
         return ResponseEntity.ok(reviewEntity);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ReviewModel> getReview(@PathVariable Long id) {
+
+        ReviewModel review = reviewService.findReviewById(id);
+
+        return ResponseEntity.ok(review);
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<String> deleteReview(@PathVariable Long id) {
+
+        reviewService.deleteReview(id);
+        return ResponseEntity.ok("Review deleted");
+    }
 
 }

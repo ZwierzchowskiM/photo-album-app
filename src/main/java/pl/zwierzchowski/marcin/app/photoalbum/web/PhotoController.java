@@ -37,5 +37,10 @@ public class PhotoController {
         return ResponseEntity.ok(photo);
     }
 
+    @DeleteMapping("/{id}")
+    ResponseEntity<String> deletePhoto(@PathVariable Long id) {
 
+        photoService.deletePhoto(id);
+        return ResponseEntity.ok("Review deleted");
+    }
 }
