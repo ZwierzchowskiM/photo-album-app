@@ -41,7 +41,7 @@ public class S3Service {
 
         s3 = getClient();
         isFileEmpty(file);
-        String objectKey = String.format("%s-%s", file.getOriginalFilename(), UUID.randomUUID());
+        String objectKey = String.format("%s-%s",  UUID.randomUUID(),file.getOriginalFilename());
 
         try {
             byte[] data = file.getBytes();
