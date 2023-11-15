@@ -22,6 +22,8 @@ public class PhotoEntity {
     @ManyToOne
     private UserEntity user;
     private LocalDateTime submittedDate;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private Status status;
     @OneToOne
     private ReviewEntity reviewResult;
