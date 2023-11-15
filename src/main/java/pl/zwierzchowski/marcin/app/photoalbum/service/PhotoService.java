@@ -45,7 +45,7 @@ public class PhotoService {
         photo.setSubmittedDate(LocalDateTime.now());
         photo.setDescription(description);
         photo.setObjectKey(S3address);
-        photo.setStatus(Status.SUBMITTED);
+        photo.setStatus(Status.PENDING);
 
         return photoRepository.save(photo);
 
