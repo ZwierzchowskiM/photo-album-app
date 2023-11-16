@@ -1,9 +1,14 @@
 package pl.zwierzchowski.marcin.app.photoalbum.web.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import pl.zwierzchowski.marcin.app.photoalbum.enums.Result;
 import pl.zwierzchowski.marcin.app.photoalbum.enums.Status;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 public class PhotoModel {
 
     private String fileName;
@@ -12,6 +17,7 @@ public class PhotoModel {
     private UserModel user;
     private LocalDateTime submittedDate;
     private Status status;
-    private ReviewModel reviewResult;
+    private Result reviewResult;
+    private String comment;
 
 }

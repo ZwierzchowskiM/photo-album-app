@@ -8,7 +8,7 @@ import pl.zwierzchowski.marcin.app.photoalbum.web.model.PhotoModel;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.ReviewModel;
 
 @RestController
-@RequestMapping("/api/reviews")
+@RequestMapping("/reviews")
 public class ReviewController {
 
     private ReviewService reviewService;
@@ -18,7 +18,7 @@ public class ReviewController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ReviewEntity> createComment (@RequestBody ReviewModel reviewModel) {
+    public ResponseEntity<ReviewEntity> createReview (@RequestBody ReviewModel reviewModel) {
         ReviewEntity reviewEntity = reviewService.create(reviewModel);
 
         return ResponseEntity.ok(reviewEntity);
@@ -28,7 +28,6 @@ public class ReviewController {
     public ResponseEntity<ReviewModel> getReview(@PathVariable Long id) {
 
         ReviewModel review = reviewService.findReviewById(id);
-
         return ResponseEntity.ok(review);
     }
 

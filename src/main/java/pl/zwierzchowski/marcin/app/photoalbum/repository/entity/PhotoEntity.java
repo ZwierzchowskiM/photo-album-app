@@ -3,6 +3,7 @@ package pl.zwierzchowski.marcin.app.photoalbum.repository.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import pl.zwierzchowski.marcin.app.photoalbum.enums.Result;
 import pl.zwierzchowski.marcin.app.photoalbum.enums.Status;
 
 import java.time.LocalDateTime;
@@ -23,10 +24,10 @@ public class PhotoEntity {
     private UserEntity user;
     private LocalDateTime submittedDate;
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
     private Status status;
-    @OneToOne
-    private ReviewEntity reviewResult;
+    @Enumerated(EnumType.STRING)
+    private Result reviewResult;
+    private String comment;
 
     public PhotoEntity() {
     }

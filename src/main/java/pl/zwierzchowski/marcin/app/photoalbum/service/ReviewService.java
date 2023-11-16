@@ -23,6 +23,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final PhotoRepository photoRepository;
     private final NotificationService notificationService;
+
     private final ReviewMapper reviewMapper;
 
 
@@ -34,14 +35,22 @@ public class ReviewService {
     }
 
 
+    public ReviewModel findReviewById(Long id) {
+
+        ReviewEntity reviewEntity = reviewRepository.findById(id).orElseThrow();
+        ReviewModel reviewModel = reviewMapper.from(reviewEntity);
+
+        return reviewModel;
+    }
 
     public ReviewEntity create(ReviewModel reviewModel) {
 
         ReviewEntity reviewEntity = reviewMapper.from(reviewModel);
         PhotoEntity photoEntity = photoRepository.findById(reviewModel.getPhotoId()).orElseThrow();
-        photoEntity.setStatus(Status.COMPLETED);
-        photoEntity.setReviewResult(reviewEntity);
         reviewEntity.setPhotoEntity(photoEntity);
+        photoEntity.setReviewResult(reviewEntity.getResult());
+        photoEntity.setComment(reviewEntity.getComment());
+        photoEntity.setStatus(Status.COMPLETED);
         reviewEntity.setCreatedDate(ZonedDateTime.now());
 
         ReviewEntity savedReview = reviewRepository.save(reviewEntity);
@@ -50,29 +59,10 @@ public class ReviewService {
 
     }
 
-    public ReviewModel read(Integer id) {
+    public ReviewModel updateReview(Integer id, ReviewModel reviewModel) {
         return null;
     }
 
-    public ReviewModel update(Integer id, ReviewModel reviewModel) {
-        return null;
-    }
-
-    public void delete(Integer id) {
-    }
-
-    public List<ReviewModel> list() {
-        return null;
-    }
-
-
-    public ReviewModel findReviewById(Long id) {
-
-        ReviewEntity reviewEntity = reviewRepository.findById(id).orElseThrow();
-        ReviewModel reviewModel = reviewMapper.from(reviewEntity);
-
-        return reviewModel;
-    }
 
 
     public void deleteReview(Long id) {

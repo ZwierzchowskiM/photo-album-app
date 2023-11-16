@@ -1,9 +1,10 @@
 package pl.zwierzchowski.marcin.app.photoalbum.service.mapper;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.UserEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.UserModel;
-
+@Service
 public class UserMapper {
 
     public UserModel from(UserEntity userEntity) {

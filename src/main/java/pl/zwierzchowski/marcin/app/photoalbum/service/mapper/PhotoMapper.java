@@ -1,11 +1,12 @@
 package pl.zwierzchowski.marcin.app.photoalbum.service.mapper;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.ReviewEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.PhotoModel;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.ReviewModel;
-
+@Service
 public class PhotoMapper {
 
     public PhotoModel from(PhotoEntity photoEntity) {

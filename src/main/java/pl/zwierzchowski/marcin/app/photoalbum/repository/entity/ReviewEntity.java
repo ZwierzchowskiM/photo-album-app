@@ -15,7 +15,7 @@ public class ReviewEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(mappedBy = "reviewResult")
+    @OneToOne
     private PhotoEntity photoEntity;
     @ManyToOne
     private UserEntity reviewer;
