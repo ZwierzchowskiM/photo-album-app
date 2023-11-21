@@ -13,7 +13,7 @@ import pl.zwierzchowski.marcin.app.photoalbum.web.model.Email;
 import java.nio.charset.StandardCharsets;
 
 
-@Component
+@Service
 public class NotificationService {
 
     @Value("${spring.mail.username}")
