@@ -13,6 +13,7 @@ public class AlbumEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String albumTitle;
     private String albumId;
     private String url;
 

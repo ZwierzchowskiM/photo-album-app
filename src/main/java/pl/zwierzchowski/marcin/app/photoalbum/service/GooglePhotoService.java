@@ -32,9 +32,10 @@ public class GooglePhotoService {
             ImmutableList.of("https://www.googleapis.com/auth/photoslibrary.appendonly");
 
 
+
+
     public AlbumEntity createAlbum(String albumName) throws IOException {
 
-        // Set up the Photos Library Client that interacts with the API
         PhotosLibrarySettings settings =
                 PhotosLibrarySettings.newBuilder()
                         .setCredentialsProvider(
@@ -45,15 +46,17 @@ public class GooglePhotoService {
                 PhotosLibraryClient photosLibraryClient =
                         PhotosLibraryClient.initialize(settings)) {
 
-            // Create a new Album  with at title
             Album createdAlbum = photosLibraryClient.createAlbum(albumName);
-            // Get some properties from the album, such as its ID and product URL
             String id = createdAlbum.getId();
             String url = createdAlbum.getProductUrl();
+            String title = createdAlbum.getTitle();
 
             AlbumEntity albumEntity = new AlbumEntity();
             albumEntity.setAlbumId(id);
             albumEntity.setUrl(url);
+            albumEntity.setAlbumTitle(title);
+
+            albumRepository.save(albumEntity);
 
             return albumEntity;
 
@@ -62,10 +65,35 @@ public class GooglePhotoService {
 
         }
 
-
         return null;
     }
 
+
+    public AlbumEntity getAlbum(String id) throws IOException {
+
+        PhotosLibrarySettings settings =
+                PhotosLibrarySettings.newBuilder()
+                        .setCredentialsProvider(
+                                FixedCredentialsProvider.create(getUserCredentials()))
+                        .build();
+
+        try (
+                PhotosLibraryClient photosLibraryClient =
+                        PhotosLibraryClient.initialize(settings)) {
+
+            Album album = photosLibraryClient.getAlbum(id);
+            String albumId = album.getId();
+            AlbumEntity albumEntity = albumRepository.findByAlbumId(albumId);
+
+            return albumEntity;
+
+        } catch (ApiException | IOException e) {
+            System.out.println("error");
+
+        }
+
+        return null;
+    }
 
     private static GoogleCredentials getUserCredentials() throws IOException {
         InputStream credentialsStream = new FileInputStream("./client_secret_auth_new.json");
