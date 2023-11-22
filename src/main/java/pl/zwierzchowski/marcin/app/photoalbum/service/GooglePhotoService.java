@@ -15,20 +15,24 @@ import java.io.InputStream;
 import java.util.List;
 import com.google.auth.oauth2.UserCredentials;
 import org.springframework.stereotype.Service;
+import pl.zwierzchowski.marcin.app.photoalbum.repository.AlbumRepository;
+import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.AlbumEntity;
 
 @Service
-public class GooglePhotosService {
+public class GooglePhotoService {
 
-    /** OAuth scopes to request. This demo requires `photoslibrary.appendonly` at a minimum. */
+
+    AlbumRepository albumRepository;
+
+    public GooglePhotoService(AlbumRepository albumRepository) {
+        this.albumRepository = albumRepository;
+    }
+
     private static final List<String> REQUIRED_SCOPES =
             ImmutableList.of("https://www.googleapis.com/auth/photoslibrary.appendonly");
 
-    String pathToFile = "./client_secret.json";
 
-    public GooglePhotosService() throws IOException {
-    }
-
-    public void testAlbum() throws IOException {
+    public AlbumEntity createAlbum(String albumName) throws IOException {
 
         // Set up the Photos Library Client that interacts with the API
         PhotosLibrarySettings settings =
@@ -42,34 +46,29 @@ public class GooglePhotosService {
                         PhotosLibraryClient.initialize(settings)) {
 
             // Create a new Album  with at title
-            Album createdAlbum = photosLibraryClient.createAlbum("My Album");
-            System.out.println("alubm ok");
+            Album createdAlbum = photosLibraryClient.createAlbum(albumName);
             // Get some properties from the album, such as its ID and product URL
             String id = createdAlbum.getId();
             String url = createdAlbum.getProductUrl();
 
-            System.out.println(id);
+            AlbumEntity albumEntity = new AlbumEntity();
+            albumEntity.setAlbumId(id);
+            albumEntity.setUrl(url);
 
+            return albumEntity;
 
         } catch (ApiException | IOException e) {
-            // Error during album creation
+            System.out.println("error");
+
         }
 
+
+        return null;
     }
 
 
-
-//    private Credentials getUserCredentials()  {
-//
-//        return UserCredentials.newBuilder()
-//                .setClientId("your client id")
-//                .setClientSecret("your client secret")
-//                .build();
-//    }
-
-
     private static GoogleCredentials getUserCredentials() throws IOException {
-        InputStream credentialsStream = new FileInputStream("./client_secret_auth.json");
+        InputStream credentialsStream = new FileInputStream("./client_secret_auth_new.json");
         return GoogleCredentials.fromStream(credentialsStream);
     }
 
