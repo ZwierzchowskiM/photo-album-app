@@ -2,30 +2,33 @@ package pl.zwierzchowski.marcin.app.photoalbum.service;
 
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.api.gax.rpc.ApiException;
-import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.collect.ImmutableList;
 import com.google.photos.library.v1.PhotosLibraryClient;
 import com.google.photos.library.v1.PhotosLibrarySettings;
 import com.google.photos.types.proto.Album;
-import com.google.api.gax.core.FixedCredentialsProvider;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import com.google.auth.oauth2.UserCredentials;
+
 import org.springframework.stereotype.Service;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.AlbumRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.AlbumEntity;
+import pl.zwierzchowski.marcin.app.photoalbum.service.mapper.AlbumMapper;
+import pl.zwierzchowski.marcin.app.photoalbum.web.model.AlbumModel;
 
 @Service
-public class GooglePhotoService {
+public class AlbumService {
 
 
     AlbumRepository albumRepository;
+    AlbumMapper albumMapper;
 
-    public GooglePhotoService(AlbumRepository albumRepository) {
+    public AlbumService(AlbumRepository albumRepository, AlbumMapper albumMapper) {
         this.albumRepository = albumRepository;
+        this.albumMapper = albumMapper;
     }
 
     private static final List<String> REQUIRED_SCOPES =
@@ -34,7 +37,7 @@ public class GooglePhotoService {
 
 
 
-    public AlbumEntity createAlbum(String albumName) throws IOException {
+    public AlbumModel createAlbum(String albumName) throws IOException {
 
         PhotosLibrarySettings settings =
                 PhotosLibrarySettings.newBuilder()
@@ -51,6 +54,20 @@ public class GooglePhotoService {
             String url = createdAlbum.getProductUrl();
             String title = createdAlbum.getTitle();
 
+//            SharedAlbumOptions options =
+//                    // Set the options for the album you want to share
+//                    SharedAlbumOptions.newBuilder()
+//                            .setIsCollaborative(true)
+//                            .setIsCommentable(true)
+//                            .build();
+//            ShareAlbumResponse response = photosLibraryClient.shareAlbum(id, options);
+//
+//            // The response contains the shareInfo object, a url, and a token for sharing
+//            ShareInfo info = response.getShareInfo();
+//            // Link to the shared album
+//            String urlShare = info.getShareableUrl();
+//            System.out.println(urlShare);
+
             AlbumEntity albumEntity = new AlbumEntity();
             albumEntity.setAlbumId(id);
             albumEntity.setUrl(url);
@@ -58,7 +75,7 @@ public class GooglePhotoService {
 
             albumRepository.save(albumEntity);
 
-            return albumEntity;
+            return albumMapper.from(albumEntity);
 
         } catch (ApiException | IOException e) {
             System.out.println("error");
@@ -69,7 +86,7 @@ public class GooglePhotoService {
     }
 
 
-    public AlbumEntity getAlbum(String id) throws IOException {
+    public AlbumModel getAlbum(String id) throws IOException {
 
         PhotosLibrarySettings settings =
                 PhotosLibrarySettings.newBuilder()
@@ -85,7 +102,7 @@ public class GooglePhotoService {
             String albumId = album.getId();
             AlbumEntity albumEntity = albumRepository.findByAlbumId(albumId);
 
-            return albumEntity;
+            return albumMapper.from(albumEntity);
 
         } catch (ApiException | IOException e) {
             System.out.println("error");
