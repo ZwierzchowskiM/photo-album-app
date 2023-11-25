@@ -6,11 +6,14 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.collect.ImmutableList;
 import com.google.photos.library.v1.PhotosLibraryClient;
 import com.google.photos.library.v1.PhotosLibrarySettings;
+import com.google.photos.library.v1.proto.NewMediaItem;
+import com.google.photos.library.v1.upload.UploadMediaItemRequest;
+import com.google.photos.library.v1.upload.UploadMediaItemResponse;
+import com.google.photos.library.v1.util.NewMediaItemFactory;
 import com.google.photos.types.proto.Album;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -33,9 +36,6 @@ public class AlbumService {
 
     private static final List<String> REQUIRED_SCOPES =
             ImmutableList.of("https://www.googleapis.com/auth/photoslibrary.appendonly");
-
-
-
 
     public AlbumModel createAlbum(String albumName) throws IOException {
 
@@ -93,7 +93,6 @@ public class AlbumService {
                         .setCredentialsProvider(
                                 FixedCredentialsProvider.create(getUserCredentials()))
                         .build();
-
         try (
                 PhotosLibraryClient photosLibraryClient =
                         PhotosLibraryClient.initialize(settings)) {
@@ -106,11 +105,59 @@ public class AlbumService {
 
         } catch (ApiException | IOException e) {
             System.out.println("error");
-
         }
 
         return null;
     }
+
+    public void uploadPhoto() throws IOException {
+
+        String albumId = "AD3RILPn5iZQzx9MedyntRmIC_SlrOMQFbNF6zEQKlTavRRRj7APa0WS1a33thyWS9-ep084-2fu";
+        String mimeType = "image/jpeg";
+
+
+        PhotosLibrarySettings settings =
+                PhotosLibrarySettings.newBuilder()
+                        .setCredentialsProvider(
+                                FixedCredentialsProvider.create(getUserCredentials()))
+                        .build();
+        try (
+                PhotosLibraryClient photosLibraryClient =
+                        PhotosLibraryClient.initialize(settings)) {
+
+            // Ścieżka do przesyłanego pliku
+            File file = new File("./test.jpeg");
+
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+
+            // Tworzenie obiektu UploadMediaItemRequest
+            UploadMediaItemRequest uploadRequest = UploadMediaItemRequest.newBuilder()
+                    .setMimeType(mimeType)
+                    .setDataFile(randomAccessFile)
+                    .build();
+
+            // Przesyłanie pliku do Google Photos
+            UploadMediaItemResponse uploadResponse = photosLibraryClient.uploadMediaItem(uploadRequest);
+
+            // Pobieranie identyfikatora przesłanego pliku (upload token)
+            String uploadToken = String.valueOf(uploadResponse.getUploadToken());
+
+            NewMediaItem newMediaItem = NewMediaItemFactory
+                    .createNewMediaItem(uploadToken, file.getName(), "test");
+            List<NewMediaItem> newItems = Arrays.asList(newMediaItem);
+
+            // Dodawanie przesyłanego pliku do albumu
+            photosLibraryClient.batchCreateMediaItems(albumId, newItems);
+
+            System.out.println("Plik został przesłany i dodany do albumu.");;
+
+        } catch (ApiException | IOException e) {
+            System.out.println("error");
+        }
+
+//        return null;
+    }
+
 
     private static GoogleCredentials getUserCredentials() throws IOException {
         InputStream credentialsStream = new FileInputStream("./client_secret_auth_new.json");

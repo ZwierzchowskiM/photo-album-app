@@ -35,6 +35,15 @@ public class AlbumController {
         return ResponseEntity.ok(albumModel);
     }
 
+    @PostMapping("/upload")
+    public void upload() throws IOException {
+
+        googlePhotosService.uploadPhoto();
+
+    }
+
+
+
 
 
 }
