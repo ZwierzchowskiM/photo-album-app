@@ -85,7 +85,6 @@ public class AlbumService {
         return null;
     }
 
-
     public AlbumModel getAlbum(String id) throws IOException {
 
         PhotosLibrarySettings settings =
@@ -125,29 +124,15 @@ public class AlbumService {
                 PhotosLibraryClient photosLibraryClient =
                         PhotosLibraryClient.initialize(settings)) {
 
-            // Ścieżka do przesyłanego pliku
             File file = new File("./test.jpeg");
-
             RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
 
-            // Tworzenie obiektu UploadMediaItemRequest
             UploadMediaItemRequest uploadRequest = UploadMediaItemRequest.newBuilder()
                     .setMimeType(mimeType)
                     .setDataFile(randomAccessFile)
                     .build();
 
-            // Przesyłanie pliku do Google Photos
             UploadMediaItemResponse uploadResponse = photosLibraryClient.uploadMediaItem(uploadRequest);
-
-            // Pobieranie identyfikatora przesłanego pliku (upload token)
-            String uploadToken = String.valueOf(uploadResponse.getUploadToken());
-
-            NewMediaItem newMediaItem = NewMediaItemFactory
-                    .createNewMediaItem(uploadToken, file.getName(), "test");
-            List<NewMediaItem> newItems = Arrays.asList(newMediaItem);
-
-            // Dodawanie przesyłanego pliku do albumu
-            photosLibraryClient.batchCreateMediaItems(albumId, newItems);
 
             System.out.println("Plik został przesłany i dodany do albumu.");;
 
