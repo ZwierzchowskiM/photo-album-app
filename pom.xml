@@ -93,11 +93,84 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.0.2</version>
 		</dependency>
+
+
+<!--		<dependency>-->
+<!--			<groupId>com.google.oauth-client</groupId>-->
+<!--			<artifactId>google-oauth-client</artifactId>-->
+<!--			<version>1.30.4</version>-->
+<!--		</dependency>-->
+
+		<!-- https://mvnrepository.com/artifact/com.google.auth/google-auth-library-oauth2-http -->
 		<dependency>
 			<groupId>com.google.auth</groupId>
 			<artifactId>google-auth-library-oauth2-http</artifactId>
-			<version>1.16.0</version>
+			<version>1.3.0</version>
 		</dependency>
+
+<!--		implementation 'com.google.api:gax-grpc:2.7.1'-->
+		<!-- https://mvnrepository.com/artifact/com.google.api/gax-grpc -->
+		<dependency>
+			<groupId>com.google.api</groupId>
+			<artifactId>gax-grpc</artifactId>
+			<version>2.7.1</version>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/com.google.oauth-client/google-oauth-client-jetty -->
+		<dependency>
+			<groupId>com.google.oauth-client</groupId>
+			<artifactId>google-oauth-client-jetty</artifactId>
+			<version>1.34.1</version>
+		</dependency>
+
+
+<!--		implementation 'com.google.http-client:google-http-client-gson:1.41.0'-->
+		<!-- https://mvnrepository.com/artifact/com.google.http-client/google-http-client-gson -->
+		<dependency>
+			<groupId>com.google.http-client</groupId>
+			<artifactId>google-http-client-gson</artifactId>
+			<version>1.43.3</version>
+		</dependency>
+
+
+
+<!--		implementation 'io.grpc:grpc-netty:1.42.1'-->
+		<!-- https://mvnrepository.com/artifact/io.grpc/grpc-netty-shaded -->
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-netty-shaded</artifactId>
+			<version>1.42.1</version>
+		</dependency>
+
+
+<!--		implementation 'org.apache.httpcomponents:httpclient:4.5.13'-->
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.13</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.google.api.client/google-api-client-auth-oauth2 -->
+		<dependency>
+			<groupId>com.google.api.client</groupId>
+			<artifactId>google-api-client-auth-oauth2</artifactId>
+			<version>1.2.3-alpha</version>
+		</dependency>
+
+
+		<!--		implementation 'io.grpc:grpc-protobuf:1.42.1'-->
+<!--		implementation 'io.netty:netty-tcnative-boringssl-static:2.0.47.Final'-->
+<!--		implementation 'commons-cli:commons-cli:1.5.0'-->
+<!--		implementation 'commons-lang:commons-lang:2.6'-->
+
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>1.33.0</version>
+		</dependency>
+		<!-- Thanks for using https://jar-download.com -->
 
 
 	</dependencies>
