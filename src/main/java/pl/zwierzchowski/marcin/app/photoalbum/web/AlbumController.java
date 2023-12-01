@@ -3,6 +3,7 @@ package pl.zwierzchowski.marcin.app.photoalbum.web;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.zwierzchowski.marcin.app.photoalbum.service.AlbumService;
+import pl.zwierzchowski.marcin.app.photoalbum.service.GooglePhotosService;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.AlbumModel;
 
 import java.io.IOException;
@@ -13,17 +14,20 @@ import java.security.GeneralSecurityException;
 public class AlbumController {
 
 
-    AlbumService googlePhotosService;
+    AlbumService albumService;
+
+    GooglePhotosService gPhotosService;
 
 
-    public AlbumController(AlbumService googlePhotosService) {
-        this.googlePhotosService = googlePhotosService;
+    public AlbumController(AlbumService albumService, GooglePhotosService gPhotosService) {
+        this.albumService = albumService;
+        this.gPhotosService = gPhotosService;
     }
 
     @PostMapping ("/")
     public ResponseEntity<AlbumModel> postAlbum(@RequestParam String name) throws IOException {
 
-        AlbumModel createdAlbum = googlePhotosService.createAlbum(name);
+        AlbumModel createdAlbum = gPhotosService.createAlbum(name);
 
         return ResponseEntity.ok(createdAlbum);
     }
@@ -33,7 +37,7 @@ public class AlbumController {
 
         AlbumModel albumModel= null;
         try {
-            albumModel = googlePhotosService.getAlbum(albumId);
+            albumModel = gPhotosService.getAlbum(albumId);
         } catch (GeneralSecurityException e) {
             throw new RuntimeException(e);
         }
@@ -44,7 +48,7 @@ public class AlbumController {
     @PostMapping("/upload")
     public void upload() throws IOException {
 
-        googlePhotosService.uploadPhoto();
+        gPhotosService.uploadItemToAlbum();
 
     }
 
