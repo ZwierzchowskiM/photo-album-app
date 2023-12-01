@@ -6,6 +6,7 @@ import pl.zwierzchowski.marcin.app.photoalbum.service.AlbumService;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.AlbumModel;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 @RestController
 @RequestMapping("/albums")
@@ -30,7 +31,12 @@ public class AlbumController {
     @GetMapping("/{albumId}")
     public ResponseEntity<AlbumModel> getAlbum(@RequestParam String albumId) throws IOException {
 
-        AlbumModel albumModel= googlePhotosService.getAlbum(albumId);
+        AlbumModel albumModel= null;
+        try {
+            albumModel = googlePhotosService.getAlbum(albumId);
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException(e);
+        }
 
         return ResponseEntity.ok(albumModel);
     }
