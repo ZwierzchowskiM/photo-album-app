@@ -14,27 +14,44 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import java.io.*;
 import java.util.List;
 import java.util.UUID;
+import java.util.*;
 
 @Service
 public class S3Service {
 
     S3Client s3;
 
-    @Value("${accessKey}")
-    private String accessKey;
-    @Value("${secret}")
-    private String secret;
+//    @Value("${accessKey}")
+//    private String accessKey;
+//    @Value("${secret}")
+//    private String secret;
     @Value("${bucketName}")
     private String bucketName;
 
-    private S3Client getClient() {
+    private S3Client getClient()  {
         Region region = Region.EU_NORTH_1;
-        S3Client s3 = S3Client.builder()
-                .region(region)
-                .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secret)))
-                .region(region)
-                .build();
-        return s3;
+
+        Properties prop = new Properties();
+
+        try (InputStream input = S3Service.class.getClassLoader().getResourceAsStream("credentials_s3.properties")) {
+
+            prop.load(input);
+            String accessKey = prop.getProperty("accessKey");
+            String secret = prop.getProperty("secret");
+
+
+            S3Client s3 = S3Client.builder()
+                    .region(region)
+                    .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secret)))
+                    .region(region)
+                    .build();
+            return s3;
+
+            } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     public String putObject(MultipartFile file) {
