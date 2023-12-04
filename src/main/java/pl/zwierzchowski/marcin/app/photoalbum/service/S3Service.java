@@ -21,10 +21,6 @@ public class S3Service {
 
     S3Client s3;
 
-//    @Value("${accessKey}")
-//    private String accessKey;
-//    @Value("${secret}")
-//    private String secret;
     @Value("${bucketName}")
     private String bucketName;
 
@@ -50,8 +46,6 @@ public class S3Service {
             } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     public String putObject(MultipartFile file) {

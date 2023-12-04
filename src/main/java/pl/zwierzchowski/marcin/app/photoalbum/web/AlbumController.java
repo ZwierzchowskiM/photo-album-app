@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import pl.zwierzchowski.marcin.app.photoalbum.service.AlbumService;
 import pl.zwierzchowski.marcin.app.photoalbum.service.GooglePhotosService;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.AlbumModel;
-
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
@@ -51,7 +50,4 @@ public class AlbumController {
 
         return ResponseEntity.ok(albums);
     }
-
-
-
 }

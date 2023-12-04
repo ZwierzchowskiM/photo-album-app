@@ -11,12 +11,10 @@ import pl.zwierzchowski.marcin.app.photoalbum.repository.PhotoRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.mapper.PhotoMapper;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.PhotoModel;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PhotoService {
@@ -30,7 +28,6 @@ public class PhotoService {
         this.s3Service = s3Service;
         this.photoMapper = photoMapper;
     }
-
 
     public PhotoModel save(MultipartFile file, String description) {
 
@@ -57,7 +54,6 @@ public class PhotoService {
         return photoModel;
     }
 
-
     public List<PhotoModel> findPendingPhotos() {
 
         List<PhotoEntity> allPendingPhotos = photoRepository.findByStatus(Status.PENDING);
@@ -66,7 +62,6 @@ public class PhotoService {
                 .toList();
 
         return photoModelList;
-
     }
 
     public ResponseEntity<byte[]> downloadPhoto(Long id) throws UnsupportedEncodingException {
@@ -87,6 +82,4 @@ public class PhotoService {
 
         photoRepository.deleteById(id);
     }
-
-
 }

@@ -1,22 +1,15 @@
 package pl.zwierzchowski.marcin.app.photoalbum.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import pl.zwierzchowski.marcin.app.photoalbum.enums.Result;
 import pl.zwierzchowski.marcin.app.photoalbum.enums.Status;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.PhotoRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.ReviewRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.ReviewEntity;
-import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.UserEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.mapper.ReviewMapper;
-import pl.zwierzchowski.marcin.app.photoalbum.web.model.PhotoModel;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.ReviewModel;
-
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Service
 public class ReviewService {
@@ -26,7 +19,6 @@ public class ReviewService {
     private final NotificationService notificationService;
     private final ReviewMapper reviewMapper;
     private final GooglePhotosService googlePhotosService;
-
 
     public ReviewService(ReviewRepository reviewRepository, PhotoRepository photoRepository, NotificationService notificationService, ReviewMapper reviewMapper, GooglePhotosService googlePhotosService) {
         this.reviewRepository = reviewRepository;

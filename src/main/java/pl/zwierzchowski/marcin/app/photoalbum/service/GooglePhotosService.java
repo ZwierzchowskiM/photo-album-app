@@ -1,20 +1,15 @@
 package pl.zwierzchowski.marcin.app.photoalbum.service;
 
-import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.api.gax.rpc.ApiException;
 import com.google.photos.library.v1.PhotosLibraryClient;
 import com.google.photos.library.v1.PhotosLibrarySettings;
-import com.google.photos.library.v1.internal.InternalPhotosLibraryClient;
 import com.google.photos.library.v1.proto.BatchCreateMediaItemsResponse;
 import com.google.photos.library.v1.proto.NewMediaItem;
 import com.google.photos.library.v1.proto.NewMediaItemResult;
-import com.google.photos.library.v1.proto.ShareAlbumResponse;
 import com.google.photos.library.v1.upload.UploadMediaItemRequest;
 import com.google.photos.library.v1.upload.UploadMediaItemResponse;
 import com.google.photos.library.v1.util.NewMediaItemFactory;
 import com.google.photos.types.proto.Album;
-import com.google.photos.types.proto.ShareInfo;
-import com.google.photos.types.proto.SharedAlbumOptions;
 import com.google.rpc.Code;
 import com.google.rpc.Status;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +21,6 @@ import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.AlbumEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.mapper.AlbumMapper;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.AlbumModel;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -217,5 +211,4 @@ public class GooglePhotosService {
         return null;
 
     }
-
 }
