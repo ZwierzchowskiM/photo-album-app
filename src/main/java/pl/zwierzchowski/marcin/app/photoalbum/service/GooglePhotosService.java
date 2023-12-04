@@ -4,6 +4,7 @@ import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.api.gax.rpc.ApiException;
 import com.google.photos.library.v1.PhotosLibraryClient;
 import com.google.photos.library.v1.PhotosLibrarySettings;
+import com.google.photos.library.v1.internal.InternalPhotosLibraryClient;
 import com.google.photos.library.v1.proto.BatchCreateMediaItemsResponse;
 import com.google.photos.library.v1.proto.NewMediaItem;
 import com.google.photos.library.v1.proto.NewMediaItemResult;
@@ -28,7 +29,9 @@ import pl.zwierzchowski.marcin.app.photoalbum.web.model.AlbumModel;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class GooglePhotosService {
@@ -167,5 +170,38 @@ public class GooglePhotosService {
 
         }
         return null;
+    }
+
+    public List<AlbumModel> getAlbums() {
+
+        List<AlbumModel> albums = new ArrayList<>();
+        logger.info("get album list");
+        try {
+            PhotosLibrarySettings settings = PhotosLibrarySettings.newBuilder()
+                    .setCredentialsProvider(credentialProviderComponent.getCredentialProvider())
+                    .build();
+            try (
+                    PhotosLibraryClient photosLibraryClient =
+                            PhotosLibraryClient.initialize(settings)) {
+
+                for (Album album : photosLibraryClient.listAlbums().iterateAll()) {
+
+                    AlbumEntity albumEntity = albumRepository.findByAlbumId(album.getId());
+                    if (albumEntity!=null) {
+                        AlbumModel albumModel = albumMapper.from(albumEntity);
+                        albums.add(albumModel);
+                    }
+                }
+
+                return albums;
+
+            } catch (ApiException | IOException e) {
+                System.out.println("error");
+            }
+        } catch (IOException | GeneralSecurityException | ApiException theE) {
+            logger.warn("uploadUrlToAlbum:", theE);
+        }
+        return null;
+
     }
 }

@@ -8,14 +8,13 @@ import pl.zwierzchowski.marcin.app.photoalbum.web.model.AlbumModel;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/albums")
 public class AlbumController {
 
-
     AlbumService albumService;
-
     GooglePhotosService gPhotosService;
 
 
@@ -45,15 +44,19 @@ public class AlbumController {
         return ResponseEntity.ok(albumModel);
     }
 
+    @GetMapping("/")
+    public ResponseEntity<List<AlbumModel>> getAlbums() throws IOException {
+
+        List<AlbumModel> albums;
+        albums = gPhotosService.getAlbums();
+
+        return ResponseEntity.ok(albums);
+    }
+
     @PostMapping("/upload")
     public void upload() throws IOException {
 
         gPhotosService.uploadItemToAlbum();
 
     }
-
-
-
-
-
 }
