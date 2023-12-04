@@ -20,8 +20,9 @@ public class ReviewEntity {
     @ManyToOne
     private UserEntity reviewer;
     private ZonedDateTime createdDate;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Result result;
     private String comment;
+    private String album;
 
 }

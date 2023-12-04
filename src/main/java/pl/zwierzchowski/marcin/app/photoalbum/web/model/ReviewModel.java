@@ -12,5 +12,6 @@ public class ReviewModel {
     private Long photoId;
     private Result result;
     private String comment;
+    private String album;
 
 }

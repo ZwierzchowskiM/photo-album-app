@@ -23,9 +23,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.AlbumRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.AlbumEntity;
+import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.mapper.AlbumMapper;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.AlbumModel;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.security.GeneralSecurityException;
@@ -42,30 +44,40 @@ public class GooglePhotosService {
 
     AlbumRepository albumRepository;
     AlbumMapper albumMapper;
-    private String albumId;
+    S3Service s3Service;
 
-    public GooglePhotosService(GoogleAPICredentialProvider credentialProviderComponent, AlbumRepository albumRepository, AlbumMapper albumMapper) {
+    public GooglePhotosService(GoogleAPICredentialProvider credentialProviderComponent, AlbumRepository albumRepository, AlbumMapper albumMapper, S3Service s3Service) {
         this.credentialProviderComponent = credentialProviderComponent;
         this.albumRepository = albumRepository;
         this.albumMapper = albumMapper;
+        this.s3Service = s3Service;
     }
 
-    public NewMediaItemResult uploadItemToAlbum() {
+    public NewMediaItemResult uploadItemToAlbum(PhotoEntity photo, String albumId) {
 
-        String albumId = "AD3RILPn5iZQzx9MedyntRmIC_SlrOMQFbNF6zEQKlTavRRRj7APa0WS1a33thyWS9-ep084-2fu";
-
-        logger.info("uploading item to google photos album: \"" + "test item" + "\"");
+        logger.info("uploading item to google photos album");
         try {
             PhotosLibrarySettings settings = PhotosLibrarySettings.newBuilder()
                     .setCredentialsProvider(credentialProviderComponent.getCredentialProvider())
                     .build();
-            try (PhotosLibraryClient photosLibraryClient = PhotosLibraryClient.initialize(settings);
-                 RandomAccessFile file = new RandomAccessFile("c:\\data\\test.jpg", "r")) {
+
+            try (PhotosLibraryClient photosLibraryClient = PhotosLibraryClient.initialize(settings)) {
+
+                String key = photo.getObjectKey();
+                byte[] s3File = s3Service.getObjectBytes(key);
+
+                File tempFile = File.createTempFile("temp", ".txt");
+                RandomAccessFile randomAccessFile = new RandomAccessFile(tempFile, "rw");
+                randomAccessFile.write(s3File);
+
                 UploadMediaItemRequest request = UploadMediaItemRequest.newBuilder()
                         .setMimeType("image/png")
-                        .setDataFile(file)
+                        .setDataFile(randomAccessFile)
                         .build();
+
                 UploadMediaItemResponse response = photosLibraryClient.uploadMediaItem(request);
+                randomAccessFile.close();
+
                 if (response.getError().isPresent()) {
                     UploadMediaItemResponse.Error error = response.getError().get();
                     logger.warn("uploadUrlToAlbum error", error.getCause());
@@ -80,6 +92,7 @@ public class GooglePhotosService {
                         uploadToken, StringUtils.truncate("test", 254), "test");
                 BatchCreateMediaItemsResponse createItemsResponse = photosLibraryClient.batchCreateMediaItems(
                         albumId, Collections.singletonList(newMediaItem));
+
                 for (NewMediaItemResult itemsResponse : createItemsResponse.getNewMediaItemResultsList()) {
                     Status status = itemsResponse.getStatus();
                     if (status.getCode() != Code.OK_VALUE) {
@@ -97,7 +110,7 @@ public class GooglePhotosService {
 
     public AlbumModel getAlbum(String id) throws IOException, GeneralSecurityException {
 
-        logger.info("uploading item to google photos album: \"" + "test item" + "\"");
+        logger.info("getAlbum: \"" + id + "\"");
         try {
             PhotosLibrarySettings settings = PhotosLibrarySettings.newBuilder()
                     .setCredentialsProvider(credentialProviderComponent.getCredentialProvider())
@@ -116,7 +129,7 @@ public class GooglePhotosService {
                 System.out.println("error");
             }
         } catch (IOException | GeneralSecurityException | ApiException theE) {
-            logger.warn("uploadUrlToAlbum:", theE);
+            logger.warn("getAlbum:", theE);
         }
         return null;
 
@@ -187,7 +200,7 @@ public class GooglePhotosService {
                 for (Album album : photosLibraryClient.listAlbums().iterateAll()) {
 
                     AlbumEntity albumEntity = albumRepository.findByAlbumId(album.getId());
-                    if (albumEntity!=null) {
+                    if (albumEntity != null) {
                         AlbumModel albumModel = albumMapper.from(albumEntity);
                         albums.add(albumModel);
                     }
@@ -199,9 +212,10 @@ public class GooglePhotosService {
                 System.out.println("error");
             }
         } catch (IOException | GeneralSecurityException | ApiException theE) {
-            logger.warn("uploadUrlToAlbum:", theE);
+            logger.warn("getAlbums:", theE);
         }
         return null;
 
     }
+
 }

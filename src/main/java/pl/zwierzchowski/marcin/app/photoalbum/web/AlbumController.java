@@ -17,7 +17,6 @@ public class AlbumController {
     AlbumService albumService;
     GooglePhotosService gPhotosService;
 
-
     public AlbumController(AlbumService albumService, GooglePhotosService gPhotosService) {
         this.albumService = albumService;
         this.gPhotosService = gPhotosService;
@@ -53,10 +52,6 @@ public class AlbumController {
         return ResponseEntity.ok(albums);
     }
 
-    @PostMapping("/upload")
-    public void upload() throws IOException {
 
-        gPhotosService.uploadItemToAlbum();
 
-    }
 }
