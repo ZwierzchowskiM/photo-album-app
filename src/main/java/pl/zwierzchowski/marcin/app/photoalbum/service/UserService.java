@@ -4,9 +4,7 @@ import org.springframework.stereotype.Component;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.UserRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.UserEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.mapper.UserMapper;
-import pl.zwierzchowski.marcin.app.photoalbum.web.model.ReviewModel;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.UserModel;
-import pl.zwierzchowski.marcin.app.photoalbum.web.model.UserRegistrationModel;
 
 import java.util.Optional;
 
@@ -21,12 +19,11 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public UserEntity register(UserRegistrationModel registration) {
+    public UserEntity register(UserModel registration) {
         UserEntity savedUser = new UserEntity();
         savedUser.setFirstName(registration.getFirstName());
         savedUser.setLastName(registration.getLastName());
         savedUser.setEmail(registration.getEmail());
-        savedUser.setPassword(registration.getPassword());
         userRepository.save(savedUser);
 
         return savedUser;

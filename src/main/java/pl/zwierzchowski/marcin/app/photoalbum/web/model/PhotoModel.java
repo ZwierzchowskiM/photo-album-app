@@ -14,7 +14,7 @@ public class PhotoModel {
     private String fileName;
     private String description;
     private String objectKey;
-    private UserModel user;
+    private String userEmail;
     private LocalDateTime submittedDate;
     private Status status;
     private Result reviewResult;

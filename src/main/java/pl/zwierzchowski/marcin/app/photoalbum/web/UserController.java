@@ -8,7 +8,6 @@ import pl.zwierzchowski.marcin.app.photoalbum.repository.UserRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.UserEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.UserService;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.UserModel;
-import pl.zwierzchowski.marcin.app.photoalbum.web.model.UserRegistrationModel;
 
 @Controller
 @RequestMapping("/users")
@@ -30,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/")
-    ResponseEntity<UserEntity> registerUser(@RequestBody UserRegistrationModel registeredUser) {
+    ResponseEntity<UserEntity> registerUser(@RequestBody UserModel registeredUser) {
         return ResponseEntity.ok(userService.register(registeredUser));
     }
 
