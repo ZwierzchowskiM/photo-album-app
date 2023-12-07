@@ -24,9 +24,9 @@ public class PhotoController {
     }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<PhotoModel> uploadPhoto(@RequestParam("file") MultipartFile file, String description) {
+    public ResponseEntity<PhotoModel> uploadPhoto(@RequestParam("file") MultipartFile file, String description,String userEmail) {
 
-        PhotoModel savedPhoto = photoService.save(file,description);
+        PhotoModel savedPhoto = photoService.upload(file,description,userEmail);
         System.out.println("You have placed file into the S3 bucket");
 
         return ResponseEntity.ok(savedPhoto);
