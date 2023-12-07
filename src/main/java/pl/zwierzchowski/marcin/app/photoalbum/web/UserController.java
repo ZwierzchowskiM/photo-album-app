@@ -9,7 +9,7 @@ import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.UserEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.UserService;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.UserModel;
 
-@Controller
+@RestController
 @RequestMapping("/users")
 public class UserController {
 

@@ -44,7 +44,7 @@ public class PhotoService {
         photo.setDescription(description);
         photo.setObjectKey(S3address);
         photo.setStatus(Status.PENDING);
-        UserEntity user = userRepository.findByEmail(userEmail).get(0);
+        UserEntity user = userRepository.findByEmail(userEmail).get();
         photo.setUser(user);
         photoRepository.save(photo);
 
@@ -69,6 +69,19 @@ public class PhotoService {
 
         return photoModelList;
     }
+
+    public List<PhotoModel> findPhotosByUser(Long id) {
+
+        UserEntity user = userRepository.findById(id).get();
+        List<PhotoEntity> allUserPhotos = photoRepository.findByUser(user);
+
+        List<PhotoModel> photoModelList = allUserPhotos.stream()
+                .map(photoMapper::from)
+                .toList();
+
+        return photoModelList;
+    }
+
 
     public ResponseEntity<byte[]> downloadPhoto(Long id) throws UnsupportedEncodingException {
 

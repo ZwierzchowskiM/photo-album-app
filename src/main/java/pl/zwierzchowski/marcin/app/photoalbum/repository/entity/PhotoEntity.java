@@ -21,6 +21,7 @@ public class PhotoEntity {
     private String description;
     private String objectKey;
     @ManyToOne
+    @JoinColumn(name = "userEntity_id")
     private UserEntity user;
     private LocalDateTime submittedDate;
     @Enumerated(EnumType.STRING)

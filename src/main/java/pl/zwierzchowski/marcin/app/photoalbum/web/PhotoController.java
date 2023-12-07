@@ -39,6 +39,13 @@ public class PhotoController {
         return ResponseEntity.ok(photo);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<PhotoModel>> getUserPhotos(@PathVariable Long userId) {
+
+        List<PhotoModel> pendingPhotos = photoService.findPhotosByUser(userId);
+        return ResponseEntity.ok(pendingPhotos);
+    }
+
     @GetMapping("/pending")
     public ResponseEntity<List<PhotoModel>> getPendingPhotos() {
 

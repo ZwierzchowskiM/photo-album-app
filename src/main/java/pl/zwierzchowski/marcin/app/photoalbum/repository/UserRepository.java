@@ -8,9 +8,11 @@ import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.UserEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
-    List<UserEntity> findByEmail(String email);
+//    List<UserEntity> findByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
 
 }
