@@ -24,9 +24,9 @@ public class PhotoController {
     }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<PhotoModel> uploadPhoto(@RequestParam("file") MultipartFile file, String description) {
+    public ResponseEntity<PhotoModel> uploadPhoto(@RequestParam("file") MultipartFile file, String description,String userEmail) {
 
-        PhotoModel savedPhoto = photoService.save(file,description);
+        PhotoModel savedPhoto = photoService.upload(file,description,userEmail);
         System.out.println("You have placed file into the S3 bucket");
 
         return ResponseEntity.ok(savedPhoto);
@@ -37,6 +37,13 @@ public class PhotoController {
 
         PhotoModel photo = photoService.findPhotoById(id);
         return ResponseEntity.ok(photo);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<PhotoModel>> getUserPhotos(@PathVariable Long userId) {
+
+        List<PhotoModel> pendingPhotos = photoService.findPhotosByUser(userId);
+        return ResponseEntity.ok(pendingPhotos);
     }
 
     @GetMapping("/pending")

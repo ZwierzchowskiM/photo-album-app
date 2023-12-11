@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.zwierzchowski.marcin.app.photoalbum.enums.Status;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.PhotoRepository;
+import pl.zwierzchowski.marcin.app.photoalbum.repository.UserRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
+import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.UserEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.mapper.PhotoMapper;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.PhotoModel;
 import java.io.UnsupportedEncodingException;
@@ -22,14 +24,16 @@ public class PhotoService {
     private PhotoRepository photoRepository;
     private S3Service s3Service;
     private PhotoMapper photoMapper;
+    private UserRepository userRepository;
 
-    public PhotoService(PhotoRepository photoRepository, S3Service s3Service, PhotoMapper photoMapper) {
+    public PhotoService(PhotoRepository photoRepository, S3Service s3Service, PhotoMapper photoMapper, UserRepository userRepository) {
         this.photoRepository = photoRepository;
         this.s3Service = s3Service;
         this.photoMapper = photoMapper;
+        this.userRepository = userRepository;
     }
 
-    public PhotoModel save(MultipartFile file, String description) {
+    public PhotoModel upload(MultipartFile file, String description, String userEmail) {
 
         String S3address = "";
         S3address = s3Service.putObject(file);
@@ -40,6 +44,8 @@ public class PhotoService {
         photo.setDescription(description);
         photo.setObjectKey(S3address);
         photo.setStatus(Status.PENDING);
+        UserEntity user = userRepository.findByEmail(userEmail).get();
+        photo.setUser(user);
         photoRepository.save(photo);
 
         PhotoModel photoModel = photoMapper.from(photo);
@@ -63,6 +69,19 @@ public class PhotoService {
 
         return photoModelList;
     }
+
+    public List<PhotoModel> findPhotosByUser(Long id) {
+
+        UserEntity user = userRepository.findById(id).get();
+        List<PhotoEntity> allUserPhotos = photoRepository.findByUser(user);
+
+        List<PhotoModel> photoModelList = allUserPhotos.stream()
+                .map(photoMapper::from)
+                .toList();
+
+        return photoModelList;
+    }
+
 
     public ResponseEntity<byte[]> downloadPhoto(Long id) throws UnsupportedEncodingException {
 
