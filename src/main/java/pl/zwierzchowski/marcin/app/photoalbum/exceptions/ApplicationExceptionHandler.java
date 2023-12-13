@@ -15,6 +15,13 @@ import java.util.Map;
 @ControllerAdvice
 public class ApplicationExceptionHandler {
 
+
+    @ExceptionHandler(value = ResourceNotFoundException.class)
+    public ResponseEntity<Object> exception(ResourceNotFoundException exception) {
+        String msg  = exception.getMessage();
+        return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> exception(MethodArgumentNotValidException exception) {
 
