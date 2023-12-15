@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.zwierzchowski.marcin.app.photoalbum.enums.Status;
+import pl.zwierzchowski.marcin.app.photoalbum.exceptions.ResourceNotFoundException;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.PhotoRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.UserRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
@@ -17,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PhotoService {
@@ -54,7 +56,8 @@ public class PhotoService {
 
     public PhotoModel findPhotoById(Long id) {
 
-        PhotoEntity photoEntity = photoRepository.findById(id).orElseThrow();
+        PhotoEntity photoEntity = photoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Photo with ID :" + id + " Not Found"));
         PhotoModel photoModel = photoMapper.from(photoEntity);
 
         return photoModel;

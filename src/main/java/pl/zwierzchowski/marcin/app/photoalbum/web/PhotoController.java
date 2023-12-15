@@ -4,6 +4,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import pl.zwierzchowski.marcin.app.photoalbum.exceptions.ResourceNotFoundException;
 import pl.zwierzchowski.marcin.app.photoalbum.service.PhotoService;
 import pl.zwierzchowski.marcin.app.photoalbum.service.S3Service;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.PhotoModel;
@@ -36,6 +37,7 @@ public class PhotoController {
     public ResponseEntity<PhotoModel> getPhoto(@PathVariable Long id) {
 
         PhotoModel photo = photoService.findPhotoById(id);
+
         return ResponseEntity.ok(photo);
     }
 

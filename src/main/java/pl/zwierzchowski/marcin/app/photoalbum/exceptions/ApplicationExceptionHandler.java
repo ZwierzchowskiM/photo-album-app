@@ -26,7 +26,6 @@ public class ApplicationExceptionHandler {
     public ResponseEntity<Object> exception(MethodArgumentNotValidException exception) {
 
         List<String> errors = new ArrayList<>();
-
         exception.getAllErrors().forEach(error -> errors.add((error.getDefaultMessage())));
 
         Map<String, Object> errorResponse = new HashMap<>();
