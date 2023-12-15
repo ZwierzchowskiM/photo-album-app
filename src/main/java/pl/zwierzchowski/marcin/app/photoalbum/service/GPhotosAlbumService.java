@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import pl.zwierzchowski.marcin.app.photoalbum.exceptions.ResourceNotFoundException;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.AlbumRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.AlbumEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
@@ -30,9 +31,9 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class GooglePhotosService {
+public class GPhotosAlbumService {
 
-    private static final Logger logger = LoggerFactory.getLogger(GooglePhotosService.class);
+    private static final Logger logger = LoggerFactory.getLogger(GPhotosAlbumService.class);
 
     private final GoogleAPICredentialProvider credentialProviderComponent;
 
@@ -40,7 +41,7 @@ public class GooglePhotosService {
     AlbumMapper albumMapper;
     S3Service s3Service;
 
-    public GooglePhotosService(GoogleAPICredentialProvider credentialProviderComponent, AlbumRepository albumRepository, AlbumMapper albumMapper, S3Service s3Service) {
+    public GPhotosAlbumService(GoogleAPICredentialProvider credentialProviderComponent, AlbumRepository albumRepository, AlbumMapper albumMapper, S3Service s3Service) {
         this.credentialProviderComponent = credentialProviderComponent;
         this.albumRepository = albumRepository;
         this.albumMapper = albumMapper;
@@ -115,7 +116,8 @@ public class GooglePhotosService {
 
                 Album album = photosLibraryClient.getAlbum(id);
                 String albumId = album.getId();
-                AlbumEntity albumEntity = albumRepository.findByAlbumId(albumId);
+                AlbumEntity albumEntity = albumRepository.findByAlbumId(albumId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Photo with ID :" + id + " Not Found"));;
 
                 return albumMapper.from(albumEntity);
 
@@ -193,7 +195,8 @@ public class GooglePhotosService {
 
                 for (Album album : photosLibraryClient.listAlbums().iterateAll()) {
 
-                    AlbumEntity albumEntity = albumRepository.findByAlbumId(album.getId());
+                    AlbumEntity albumEntity = albumRepository.findByAlbumId(album.getId()).get();
+
                     if (albumEntity != null) {
                         AlbumModel albumModel = albumMapper.from(albumEntity);
                         albums.add(albumModel);

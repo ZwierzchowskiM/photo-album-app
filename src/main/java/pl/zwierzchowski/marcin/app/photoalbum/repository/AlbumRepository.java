@@ -6,8 +6,9 @@ import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.AlbumEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AlbumRepository extends CrudRepository<AlbumEntity, Long> {
 
-    AlbumEntity findByAlbumId(String albumId);
+    Optional<AlbumEntity> findByAlbumId(String albumId);
 }

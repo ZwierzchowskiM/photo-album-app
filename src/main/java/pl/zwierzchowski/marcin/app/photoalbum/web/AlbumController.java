@@ -2,9 +2,9 @@ package pl.zwierzchowski.marcin.app.photoalbum.web;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.zwierzchowski.marcin.app.photoalbum.service.AlbumService;
-import pl.zwierzchowski.marcin.app.photoalbum.service.GooglePhotosService;
+import pl.zwierzchowski.marcin.app.photoalbum.service.GPhotosAlbumService;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.AlbumModel;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
@@ -13,15 +13,13 @@ import java.util.List;
 @RequestMapping("/albums")
 public class AlbumController {
 
-    AlbumService albumService;
-    GooglePhotosService gPhotosService;
+    GPhotosAlbumService gPhotosService;
 
-    public AlbumController(AlbumService albumService, GooglePhotosService gPhotosService) {
-        this.albumService = albumService;
+    public AlbumController(GPhotosAlbumService gPhotosService) {
         this.gPhotosService = gPhotosService;
     }
 
-    @PostMapping ("/")
+    @PostMapping("/")
     public ResponseEntity<AlbumModel> postAlbum(@RequestParam String name) throws IOException {
 
         AlbumModel createdAlbum = gPhotosService.createAlbum(name);
@@ -32,7 +30,7 @@ public class AlbumController {
     @GetMapping("/{albumId}")
     public ResponseEntity<AlbumModel> getAlbum(@RequestParam String albumId) throws IOException {
 
-        AlbumModel albumModel= null;
+        AlbumModel albumModel = null;
         try {
             albumModel = gPhotosService.getAlbum(albumId);
         } catch (GeneralSecurityException e) {
