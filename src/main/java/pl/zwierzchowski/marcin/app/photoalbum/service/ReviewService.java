@@ -3,6 +3,7 @@ package pl.zwierzchowski.marcin.app.photoalbum.service;
 import org.springframework.stereotype.Service;
 import pl.zwierzchowski.marcin.app.photoalbum.enums.Result;
 import pl.zwierzchowski.marcin.app.photoalbum.enums.Status;
+import pl.zwierzchowski.marcin.app.photoalbum.exceptions.ResourceNotFoundException;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.PhotoRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.ReviewRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
@@ -18,9 +19,9 @@ public class ReviewService {
     private final PhotoRepository photoRepository;
     private final NotificationService notificationService;
     private final ReviewMapper reviewMapper;
-    private final GooglePhotosService googlePhotosService;
+    private final GPhotosAlbumService googlePhotosService;
 
-    public ReviewService(ReviewRepository reviewRepository, PhotoRepository photoRepository, NotificationService notificationService, ReviewMapper reviewMapper, GooglePhotosService googlePhotosService) {
+    public ReviewService(ReviewRepository reviewRepository, PhotoRepository photoRepository, NotificationService notificationService, ReviewMapper reviewMapper, GPhotosAlbumService googlePhotosService) {
         this.reviewRepository = reviewRepository;
         this.photoRepository = photoRepository;
         this.notificationService = notificationService;
@@ -30,7 +31,8 @@ public class ReviewService {
 
     public ReviewModel findReviewById(Long id) {
 
-        ReviewEntity reviewEntity = reviewRepository.findById(id).orElseThrow();
+        ReviewEntity reviewEntity = reviewRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Review with ID :" + id + " Not Found"));;
         ReviewModel reviewModel = reviewMapper.from(reviewEntity);
 
         return reviewModel;

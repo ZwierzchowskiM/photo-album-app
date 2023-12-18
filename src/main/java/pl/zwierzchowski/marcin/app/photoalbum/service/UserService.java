@@ -1,6 +1,7 @@
 package pl.zwierzchowski.marcin.app.photoalbum.service;
 
 import org.springframework.stereotype.Component;
+import pl.zwierzchowski.marcin.app.photoalbum.exceptions.ResourceNotFoundException;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.UserRepository;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.UserEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.mapper.UserMapper;
@@ -31,8 +32,9 @@ public class UserService {
 
     public UserModel findUserById(Long id) {
 
-        Optional<UserEntity> user = userRepository.findById(id);
-        UserModel userModel = userMapper.from(user.get());
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID :" + id + " Not Found"));;
+        UserModel userModel = userMapper.from(user);
 
         return userModel;
 
