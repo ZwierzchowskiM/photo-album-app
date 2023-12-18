@@ -30,12 +30,8 @@ public class AlbumController {
     @GetMapping("/{albumId}")
     public ResponseEntity<AlbumModel> getAlbum(@RequestParam String albumId) throws IOException {
 
-        AlbumModel albumModel = null;
-        try {
-            albumModel = gPhotosService.getAlbum(albumId);
-        } catch (GeneralSecurityException e) {
-            throw new RuntimeException(e);
-        }
+        AlbumModel albumModel = new AlbumModel();
+        albumModel = gPhotosService.getAlbum(albumId);
 
         return ResponseEntity.ok(albumModel);
     }

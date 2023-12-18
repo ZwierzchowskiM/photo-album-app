@@ -103,7 +103,7 @@ public class GPhotosAlbumService {
     }
 
 
-    public AlbumModel getAlbum(String id) throws IOException, GeneralSecurityException {
+    public AlbumModel getAlbum(String id) {
 
         logger.info("getAlbum: \"" + id + "\"");
         try {
