@@ -28,7 +28,7 @@ public class AlbumController {
     }
 
     @GetMapping("/{albumId}")
-    public ResponseEntity<AlbumModel> getAlbum(@RequestParam String albumId) throws IOException {
+    public ResponseEntity<AlbumModel> getAlbum(@PathVariable String albumId) throws IOException {
 
         AlbumModel albumModel = new AlbumModel();
         albumModel = gPhotosService.getAlbum(albumId);
