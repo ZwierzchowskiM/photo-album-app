@@ -12,9 +12,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.zwierzchowski.marcin.app.photoalbum.exceptions.ResourceNotFoundException;
 import pl.zwierzchowski.marcin.app.photoalbum.service.GPhotosAlbumService;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.AlbumModel;
+
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
     @SpringBootTest
@@ -30,9 +34,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
         @Test
-        void postAlbum() {
-        }
+        void givenAlbumName_whenPostAlbum_thenReturnAlbum() throws Exception {
 
+            //given
+            AlbumModel albumModel = new AlbumModel();
+            albumModel.setAlbumTitle("new Album");
+
+
+            when(gPhotosAlbumService.createAlbum("new Album")).thenReturn(albumModel);
+
+            mockMvc.perform(post("/albums/" )
+                            .param("name", "new Album"))
+                    .andDo(MockMvcResultHandlers.print())
+                    .andExpect(status().is(200))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.albumTitle", Matchers.is("new Album")));
+
+        }
         @Test
         void givenAlbumModelWithValidId_whenGetAlbum_thenReturnAlbumWithId() throws Exception {
 
