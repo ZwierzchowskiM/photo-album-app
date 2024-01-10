@@ -15,6 +15,7 @@ import pl.zwierzchowski.marcin.app.photoalbum.web.model.AlbumModel;
 
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -67,7 +68,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         }
 
         @Test
-        void givenAlbumModelWithInvalidId_whenGetAlbum_thenReturnAlbumWithId() throws Exception {
+        void givenAlbumModelWithInvalidId_whenGetAlbum_thenThrowException() throws Exception {
 
             //given
             AlbumModel albumModel = new AlbumModel();
@@ -78,7 +79,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             mockMvc.perform(get("/albums/0okm1qaz" ))
                     .andDo(MockMvcResultHandlers.print())
                     .andExpect(status().isNotFound())
-                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException));
+                    .andExpect(result -> assertInstanceOf(ResourceNotFoundException.class, result.getResolvedException()));
 
         }
 

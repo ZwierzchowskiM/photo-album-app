@@ -75,7 +75,8 @@ public class PhotoService {
 
     public List<PhotoModel> findPhotosByUser(Long id) {
 
-        UserEntity user = userRepository.findById(id).get();
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID :" + id + " Not Found"));
         List<PhotoEntity> allUserPhotos = photoRepository.findByUser(user);
 
         List<PhotoModel> photoModelList = allUserPhotos.stream()
