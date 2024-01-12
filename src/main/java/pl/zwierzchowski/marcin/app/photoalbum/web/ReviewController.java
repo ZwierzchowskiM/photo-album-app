@@ -16,10 +16,11 @@ public class ReviewController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ReviewEntity> createReview (@RequestBody ReviewModel reviewModel) {
-        ReviewEntity reviewEntity = reviewService.create(reviewModel);
+    public ResponseEntity<ReviewModel> createReview (@RequestBody ReviewModel reviewModel) {
 
-        return ResponseEntity.ok(reviewEntity);
+        ReviewModel savedReview = reviewService.create(reviewModel);
+
+        return ResponseEntity.ok(savedReview);
     }
 
     @GetMapping("/{id}")

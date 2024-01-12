@@ -38,7 +38,7 @@ public class ReviewService {
         return reviewModel;
     }
 
-    public ReviewEntity create(ReviewModel reviewModel) {
+    public ReviewModel create(ReviewModel reviewModel) {
 
         ReviewEntity review = reviewMapper.from(reviewModel);
         PhotoEntity photo = photoRepository.findById(reviewModel.getPhotoId()).orElseThrow();
@@ -57,7 +57,8 @@ public class ReviewService {
             googlePhotosService.uploadItemToAlbum(photo,album);
         }
 
-        return savedReview;
+        ReviewModel savedReviewModel = reviewMapper.from(savedReview);
+        return savedReviewModel;
 
     }
 
