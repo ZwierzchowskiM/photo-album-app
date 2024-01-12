@@ -2,10 +2,8 @@ package pl.zwierzchowski.marcin.app.photoalbum.web;
 
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.UserRepository;
-import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.UserEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.UserService;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.UserModel;
 
@@ -29,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/")
-    ResponseEntity<UserEntity> registerUser(@RequestBody UserModel registeredUser) {
+    ResponseEntity<UserModel> registerUser(@RequestBody UserModel registeredUser) {
         return ResponseEntity.ok(userService.register(registeredUser));
     }
 

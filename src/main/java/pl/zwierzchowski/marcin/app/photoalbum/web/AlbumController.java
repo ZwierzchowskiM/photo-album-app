@@ -4,9 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.zwierzchowski.marcin.app.photoalbum.service.GPhotosAlbumService;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.AlbumModel;
-
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.List;
 
 @RestController

@@ -46,7 +46,8 @@ public class PhotoService {
         photo.setDescription(description);
         photo.setObjectKey(S3address);
         photo.setStatus(Status.PENDING);
-        UserEntity user = userRepository.findByEmail(userEmail).get();
+        UserEntity user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User with email :" + userEmail + " Not Found"));
         photo.setUser(user);
         photoRepository.save(photo);
 

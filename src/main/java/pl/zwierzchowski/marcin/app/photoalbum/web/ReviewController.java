@@ -2,7 +2,6 @@ package pl.zwierzchowski.marcin.app.photoalbum.web;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.ReviewEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.ReviewService;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.ReviewModel;
 

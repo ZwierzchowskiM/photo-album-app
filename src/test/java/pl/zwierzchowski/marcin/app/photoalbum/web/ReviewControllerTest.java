@@ -11,6 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import pl.zwierzchowski.marcin.app.photoalbum.enums.Result;
 import pl.zwierzchowski.marcin.app.photoalbum.service.ReviewService;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.ReviewModel;
+
+import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -56,12 +58,13 @@ class ReviewControllerTest {
     @Test
     void givenValidReviewModel_whenCreateReview_thenReturnSavedReview() throws Exception {
         // Given
+        String comment = "test comment";
         ReviewModel validReviewModel = new ReviewModel();
-        validReviewModel.setResult(Result.ACCEPTED);
+        validReviewModel.setComment(comment);
         ReviewModel expectedSavedReview = new ReviewModel();
-        expectedSavedReview.setResult(Result.ACCEPTED);
+        expectedSavedReview.setComment(comment);
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonReviewModel = objectMapper.writeValueAsString(validReviewModel);
+        String jsonReviewModel = objectMapper.writeValueAsString(expectedSavedReview);
 
         // When
         when(reviewService.create(validReviewModel)).thenReturn(expectedSavedReview);
@@ -71,7 +74,8 @@ class ReviewControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonReviewModel))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.comment", is(1)));
     }
 
     @Test

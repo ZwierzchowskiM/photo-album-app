@@ -20,14 +20,16 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public UserEntity register(UserModel registration) {
+    public UserModel register(UserModel registration) {
         UserEntity savedUser = new UserEntity();
         savedUser.setFirstName(registration.getFirstName());
         savedUser.setLastName(registration.getLastName());
         savedUser.setEmail(registration.getEmail());
         userRepository.save(savedUser);
 
-        return savedUser;
+        UserModel savedUserModel = userMapper.from(savedUser);
+
+        return savedUserModel;
     }
 
     public UserModel findUserById(Long id) {

@@ -41,7 +41,8 @@ public class ReviewService {
     public ReviewModel create(ReviewModel reviewModel) {
 
         ReviewEntity review = reviewMapper.from(reviewModel);
-        PhotoEntity photo = photoRepository.findById(reviewModel.getPhotoId()).orElseThrow();
+        PhotoEntity photo = photoRepository.findById(reviewModel.getPhotoId())
+                .orElseThrow(() -> new ResourceNotFoundException("Photo with ID :" + reviewModel.getPhotoId() + " Not Found"));
 
         photo.setReviewResult(review.getResult());
         photo.setComment(review.getComment());
