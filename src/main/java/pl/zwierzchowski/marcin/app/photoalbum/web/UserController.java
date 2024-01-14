@@ -1,6 +1,7 @@
 package pl.zwierzchowski.marcin.app.photoalbum.web;
 
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.UserRepository;
@@ -27,7 +28,7 @@ public class UserController {
     }
 
     @PostMapping("/")
-    ResponseEntity<UserModel> registerUser(@RequestBody UserModel registeredUser) {
+    ResponseEntity<UserModel> registerUser(@Valid @RequestBody UserModel registeredUser) {
         return ResponseEntity.ok(userService.register(registeredUser));
     }
 

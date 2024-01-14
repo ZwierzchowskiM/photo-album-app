@@ -1,5 +1,6 @@
 package pl.zwierzchowski.marcin.app.photoalbum.web;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.zwierzchowski.marcin.app.photoalbum.service.ReviewService;
@@ -15,7 +16,7 @@ public class ReviewController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ReviewModel> createReview (@RequestBody ReviewModel reviewModel) {
+    public ResponseEntity<ReviewModel> createReview (@Valid @RequestBody ReviewModel reviewModel) {
 
         ReviewModel savedReview = reviewService.create(reviewModel);
 
