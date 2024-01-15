@@ -27,12 +27,14 @@ public class PhotoService {
     private S3Service s3Service;
     private PhotoMapper photoMapper;
     private UserRepository userRepository;
+    private EmailService emailService;
 
-    public PhotoService(PhotoRepository photoRepository, S3Service s3Service, PhotoMapper photoMapper, UserRepository userRepository) {
+    public PhotoService(PhotoRepository photoRepository, S3Service s3Service, PhotoMapper photoMapper, UserRepository userRepository, EmailService emailService) {
         this.photoRepository = photoRepository;
         this.s3Service = s3Service;
         this.photoMapper = photoMapper;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     public PhotoModel upload(MultipartFile file, String description, String userEmail) {
@@ -41,7 +43,7 @@ public class PhotoService {
         S3address = s3Service.putObject(file);
 
         PhotoEntity photo = new PhotoEntity();
-        photo.setFileName(file.getName());
+        photo.setFileName(file.getOriginalFilename());
         photo.setSubmittedDate(LocalDateTime.now());
         photo.setDescription(description);
         photo.setObjectKey(S3address);
@@ -50,6 +52,8 @@ public class PhotoService {
                 .orElseThrow(() -> new ResourceNotFoundException("User with email :" + userEmail + " Not Found"));
         photo.setUser(user);
         photoRepository.save(photo);
+        emailService.sendPhotoUploadedToS3(user,photo);
+
 
         PhotoModel photoModel = photoMapper.from(photo);
         return photoModel;
