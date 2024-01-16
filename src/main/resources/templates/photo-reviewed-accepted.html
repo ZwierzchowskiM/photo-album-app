@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Template for HTML email</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<p>
+    Hello, <span th:text="${name}">Peter Static</span>!
+</p>
+<p>
+    Your photo <span th:text="${fileName}">Peter Static</span> has been successfully reviewed.
+    Review result is <span th:text="${reviewResult}">ACCEPTED</span>.
+    Photo is sent to album <span th:text="${album}">album url</span>
+</p>
+
+<p>
+    Regards, <br/>
+    <em>Marcin</em>
+</p>
+</body>
+</html>

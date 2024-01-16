@@ -8,7 +8,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import pl.zwierzchowski.marcin.app.photoalbum.enums.Result;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.PhotoEntity;
+import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.ReviewEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.UserEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.Email;
 
@@ -19,7 +21,8 @@ import java.util.Map;
 @Service
 public class EmailService {
 
-    @Value("${spring.mail.username}") private String sender;
+    @Value("${spring.mail.username}")
+    private String sender;
 
     private JavaMailSender emailSender;
 
@@ -47,8 +50,7 @@ public class EmailService {
     }
 
 
-
-    private Email createEmailPhotoUploaded (UserEntity user, PhotoEntity photo) {
+    private Email createEmailPhotoUploaded(UserEntity user, PhotoEntity photo) {
 
         Email email = new Email();
         email.setTo(user.getEmail());
@@ -64,9 +66,69 @@ public class EmailService {
         return email;
     }
 
-    public void sendPhotoUploadedToS3(UserEntity user, PhotoEntity photo)
-    {
+    //TODO add exception handling
+    public void sendPhotoUploadedToS3(UserEntity user, PhotoEntity photo) {
         Email email = createEmailPhotoUploaded(user, photo);
+        try {
+            sendMail(email);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private Email createEmailPhotoAccepted(ReviewEntity review) {
+
+        Email email = new Email();
+        PhotoEntity photo = review.getPhotoEntity();
+        UserEntity user = photo.getUser();
+
+        email.setTo(user.getEmail());
+        email.setFrom(sender);
+        email.setSubject("Photo reveiwed");
+        email.setTemplate("photo-reviewed-accepted.html");
+
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("name", user.getFirstName());
+        properties.put("fileName", photo.getFileName());
+        properties.put("reviewResult", review.getResult());
+        properties.put("album", review.getAlbum());
+        email.setProperties(properties);
+
+        return email;
+    }
+
+    private Email createEmailPhotoRejected(ReviewEntity review) {
+
+        Email email = new Email();
+        PhotoEntity photo = review.getPhotoEntity();
+        UserEntity user = photo.getUser();
+
+        email.setTo(user.getEmail());
+        email.setFrom(sender);
+        email.setSubject("Photo reveiwed");
+        email.setTemplate("photo-reviewed-rejected.html");
+
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("name", user.getFirstName());
+        properties.put("fileName", photo.getFileName());
+        properties.put("reviewResult", review.getResult());
+        properties.put("album", review.getAlbum());
+        email.setProperties(properties);
+
+        return email;
+    }
+
+    //TODO add exception handling
+    public void sendPhotoReviewResult(ReviewEntity review) {
+
+        Email email = new Email();
+        if (review.getResult().equals(Result.ACCEPTED)) {
+            email = createEmailPhotoAccepted(review);
+        } else {
+            email = createEmailPhotoRejected(review);
+        }
+
         try {
             sendMail(email);
         } catch (MessagingException e) {
