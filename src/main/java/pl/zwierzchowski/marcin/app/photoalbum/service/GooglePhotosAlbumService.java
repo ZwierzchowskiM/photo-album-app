@@ -6,10 +6,13 @@ import com.google.photos.library.v1.PhotosLibrarySettings;
 import com.google.photos.library.v1.proto.BatchCreateMediaItemsResponse;
 import com.google.photos.library.v1.proto.NewMediaItem;
 import com.google.photos.library.v1.proto.NewMediaItemResult;
+import com.google.photos.library.v1.proto.ShareAlbumResponse;
 import com.google.photos.library.v1.upload.UploadMediaItemRequest;
 import com.google.photos.library.v1.upload.UploadMediaItemResponse;
 import com.google.photos.library.v1.util.NewMediaItemFactory;
 import com.google.photos.types.proto.Album;
+import com.google.photos.types.proto.ShareInfo;
+import com.google.photos.types.proto.SharedAlbumOptions;
 import com.google.rpc.Code;
 import com.google.rpc.Status;
 import org.apache.commons.lang3.StringUtils;
@@ -31,9 +34,9 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class GPhotosAlbumService {
+public class GooglePhotosAlbumService {
 
-    private static final Logger logger = LoggerFactory.getLogger(GPhotosAlbumService.class);
+    private static final Logger logger = LoggerFactory.getLogger(GooglePhotosAlbumService.class);
 
     private final GoogleAPICredentialProvider credentialProviderComponent;
 
@@ -41,7 +44,7 @@ public class GPhotosAlbumService {
     AlbumMapper albumMapper;
     S3Service s3Service;
 
-    public GPhotosAlbumService(GoogleAPICredentialProvider credentialProviderComponent, AlbumRepository albumRepository, AlbumMapper albumMapper, S3Service s3Service) {
+    public GooglePhotosAlbumService(GoogleAPICredentialProvider credentialProviderComponent, AlbumRepository albumRepository, AlbumMapper albumMapper, S3Service s3Service) {
         this.credentialProviderComponent = credentialProviderComponent;
         this.albumRepository = albumRepository;
         this.albumMapper = albumMapper;
@@ -131,6 +134,7 @@ public class GPhotosAlbumService {
 
     }
 
+    // TODO exception handling
     public AlbumModel createAlbum(String albumName) throws IOException {
 
         logger.info("creating album: \"" + albumName + "\"");
@@ -148,26 +152,25 @@ public class GPhotosAlbumService {
                 String url = createdAlbum.getProductUrl();
                 String title = createdAlbum.getTitle();
 
+                AlbumEntity albumEntity = new AlbumEntity();
+                albumEntity.setAlbumId(id);
+                albumEntity.setUrl(url);
+                albumEntity.setAlbumTitle(title);
+                albumRepository.save(albumEntity);
+
 //                SharedAlbumOptions options =
 //                        // Set the options for the album you want to share
 //                        SharedAlbumOptions.newBuilder()
 //                                .setIsCollaborative(true)
 //                                .setIsCommentable(true)
 //                                .build();
+//
 //                ShareAlbumResponse response = photosLibraryClient.shareAlbum(id, options);
 //
 //                // The response contains the shareInfo object, a url, and a token for sharing
 //                ShareInfo info = response.getShareInfo();
 //                // Link to the shared album
 //                String urlShare = ((ShareInfo) info).getShareableUrl();
-//                System.out.println(urlShare);
-
-                AlbumEntity albumEntity = new AlbumEntity();
-                albumEntity.setAlbumId(id);
-                albumEntity.setUrl(url);
-                albumEntity.setAlbumTitle(title);
-
-                albumRepository.save(albumEntity);
 
                 return albumMapper.from(albumEntity);
 
@@ -178,9 +181,13 @@ public class GPhotosAlbumService {
             logger.warn("uploadUrlToAlbum:", theE);
 
         }
+
+
         return null;
     }
 
+
+    // TODO change optional
     public List<AlbumModel> getAlbums() {
 
         List<AlbumModel> albums = new ArrayList<>();

@@ -10,10 +10,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.zwierzchowski.marcin.app.photoalbum.exceptions.ResourceNotFoundException;
-import pl.zwierzchowski.marcin.app.photoalbum.service.GPhotosAlbumService;
+import pl.zwierzchowski.marcin.app.photoalbum.service.GooglePhotosAlbumService;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.AlbumModel;
-
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -31,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         private MockMvc mockMvc;
 
         @MockBean
-        private GPhotosAlbumService gPhotosAlbumService;
+        private GooglePhotosAlbumService gPhotosAlbumService;
 
 
         @Test

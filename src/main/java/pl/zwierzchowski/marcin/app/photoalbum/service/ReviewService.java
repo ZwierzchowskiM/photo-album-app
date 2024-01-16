@@ -19,10 +19,10 @@ public class ReviewService {
     private final PhotoRepository photoRepository;
     private final NotificationService notificationService;
     private final ReviewMapper reviewMapper;
-    private final GPhotosAlbumService googlePhotosService;
+    private final GooglePhotosAlbumService googlePhotosService;
     private final EmailService emailService;
 
-    public ReviewService(ReviewRepository reviewRepository, PhotoRepository photoRepository, NotificationService notificationService, ReviewMapper reviewMapper, GPhotosAlbumService googlePhotosService, EmailService emailService) {
+    public ReviewService(ReviewRepository reviewRepository, PhotoRepository photoRepository, NotificationService notificationService, ReviewMapper reviewMapper, GooglePhotosAlbumService googlePhotosService, EmailService emailService) {
         this.reviewRepository = reviewRepository;
         this.photoRepository = photoRepository;
         this.notificationService = notificationService;

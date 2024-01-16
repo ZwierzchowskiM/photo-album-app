@@ -34,11 +34,13 @@ public class GoogleAPICredentialProvider {
 	private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
 
 	private static final List<String> REQUIRED_SCOPES = ImmutableList.of(
-			/*"https://www.googleapis.com/auth/photoslibrary.readonly",
-			"https://www.googleapis.com/auth/photoslibrary.appendonly",*/
+//			"https://www.googleapis.com/auth/photoslibrary.readonly"
+//			"https://www.googleapis.com/auth/photoslibrary.appendonly",
 			"https://www.googleapis.com/auth/photoslibrary"
+//			"https://www.googleapis.com/auth/photoslibrary.edit.appcreateddata"
 //			"https://www.googleapis.com/auth/photoslibrary.sharing"
-			);
+	);
+
 
 	public JsonFactory getJsonFactory() {
 		return JSON_FACTORY;
