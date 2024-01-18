@@ -19,14 +19,16 @@ public class ReviewService {
     private final PhotoRepository photoRepository;
     private final NotificationService notificationService;
     private final ReviewMapper reviewMapper;
-    private final GPhotosAlbumService googlePhotosService;
+    private final GooglePhotosAlbumService googlePhotosService;
+    private final EmailService emailService;
 
-    public ReviewService(ReviewRepository reviewRepository, PhotoRepository photoRepository, NotificationService notificationService, ReviewMapper reviewMapper, GPhotosAlbumService googlePhotosService) {
+    public ReviewService(ReviewRepository reviewRepository, PhotoRepository photoRepository, NotificationService notificationService, ReviewMapper reviewMapper, GooglePhotosAlbumService googlePhotosService, EmailService emailService) {
         this.reviewRepository = reviewRepository;
         this.photoRepository = photoRepository;
         this.notificationService = notificationService;
         this.reviewMapper = reviewMapper;
         this.googlePhotosService = googlePhotosService;
+        this.emailService = emailService;
     }
 
     public ReviewModel findReviewById(Long id) {
@@ -57,9 +59,9 @@ public class ReviewService {
             String album = reviewModel.getAlbum();
             googlePhotosService.uploadItemToAlbum(photo,album);
         }
+        emailService.sendPhotoReviewResult(savedReview);
 
-        ReviewModel savedReviewModel = reviewMapper.from(savedReview);
-        return savedReviewModel;
+        return reviewMapper.from(savedReview);
 
     }
 
