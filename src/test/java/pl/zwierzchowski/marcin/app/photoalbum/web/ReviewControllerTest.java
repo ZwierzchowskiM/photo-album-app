@@ -82,7 +82,5 @@ class ReviewControllerTest {
     void getReview() {
     }
 
-    @Test
-    void deleteReview() {
-    }
+
 }
