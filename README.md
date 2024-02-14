@@ -1,7 +1,7 @@
 # photo-album-app
 
 
-This application allows users to upload photos to the Amazon S3 platform. Then photo can be transfered to Google Photos while is accepted or reject it if needed.
+This application allows users to upload photos to the Amazon S3 platform. Then photo can be transferred to Google Photos while is accepted or reject it if needed.
 
 ### Features
 
@@ -39,6 +39,36 @@ secret="your s3 secret"
 
 Within the application.properties file, there is a required property `bucketName`, which defines the S3 bucket name
 to push content from.
+
+## How to run
+
+To get this project up and running, navigate to root directory of an application and execute following commands:
+
+* Create a jar file.
+```
+$ mvn package
+```
+
+* Then build docker image using already built jar file.
+
+```
+$ docker build -t photo-album-app .
+
+```
+
+* Run whole setup
+
+```
+$ docker run -p 8080:8080 photo-album-app
+```
+You can open Swagger UI at address:
+http://localhost:8080/swagger-ui/index.html#/
+
+Something similar to this should appear:
+
+<div align="left">
+ <img src="https://github.com/ZwierzchowskiM/photo-album-app/blob/main/Files/images/swagger_ui.PNG" width="600" height="300" alt="">
+</div>
 
 ## Swagger
 
