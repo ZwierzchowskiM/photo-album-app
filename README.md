@@ -67,7 +67,7 @@ http://localhost:8080/swagger-ui/index.html#/
 Something similar to this should appear:
 
 <div align="left">
- <img src="https://github.com/ZwierzchowskiM/photo-album-app/blob/main/Files/images/swagger_ui.PNG" width="600" height="300" alt="">
+ <img src="https://github.com/ZwierzchowskiM/photo-album-app/blob/main/files/images/swagger_ui.png" width="600" height="300" alt="">
 </div>
 
 ## Swagger
