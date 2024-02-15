@@ -158,20 +158,6 @@ public class GooglePhotosAlbumService {
                 albumEntity.setAlbumTitle(title);
                 albumRepository.save(albumEntity);
 
-//                SharedAlbumOptions options =
-//                        // Set the options for the album you want to share
-//                        SharedAlbumOptions.newBuilder()
-//                                .setIsCollaborative(true)
-//                                .setIsCommentable(true)
-//                                .build();
-//
-//                ShareAlbumResponse response = photosLibraryClient.shareAlbum(id, options);
-//
-//                // The response contains the shareInfo object, a url, and a token for sharing
-//                ShareInfo info = response.getShareInfo();
-//                // Link to the shared album
-//                String urlShare = ((ShareInfo) info).getShareableUrl();
-
                 return albumMapper.from(albumEntity);
 
             } catch (ApiException | IOException e) {

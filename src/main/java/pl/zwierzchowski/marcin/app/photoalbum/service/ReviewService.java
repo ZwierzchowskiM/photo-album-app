@@ -11,9 +11,13 @@ import pl.zwierzchowski.marcin.app.photoalbum.repository.entity.ReviewEntity;
 import pl.zwierzchowski.marcin.app.photoalbum.service.mapper.ReviewMapper;
 import pl.zwierzchowski.marcin.app.photoalbum.web.model.ReviewModel;
 import java.time.ZonedDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class ReviewService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ReviewService.class);
 
     private final ReviewRepository reviewRepository;
     private final PhotoRepository photoRepository;
@@ -30,7 +34,7 @@ public class ReviewService {
     }
 
     public ReviewModel findReviewById(Long id) {
-
+        logger.info("Finding review by ID {}", id);
         ReviewEntity reviewEntity = reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review with ID :" + id + " Not Found"));;
         ReviewModel reviewModel = reviewMapper.from(reviewEntity);
@@ -39,7 +43,7 @@ public class ReviewService {
     }
 
     public ReviewModel create(ReviewModel reviewModel) {
-
+        logger.info("Creating review");
         ReviewEntity review = reviewMapper.from(reviewModel);
         PhotoEntity photo = photoRepository.findById(reviewModel.getPhotoId())
                 .orElseThrow(() -> new ResourceNotFoundException("Photo with ID :" + reviewModel.getPhotoId() + " Not Found"));
@@ -60,10 +64,10 @@ public class ReviewService {
         emailService.sendPhotoReviewResult(savedReview);
 
         return reviewMapper.from(savedReview);
-
     }
 
     public void deleteReview(Long id) {
+        logger.info("Deleting review with ID {}", id);
         reviewRepository.deleteById(id);
     }
 }

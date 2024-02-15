@@ -1,5 +1,7 @@
 package pl.zwierzchowski.marcin.app.photoalbum.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,11 +20,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PhotoService {
 
+    private static final Logger logger = LoggerFactory.getLogger(PhotoService.class);
     private PhotoRepository photoRepository;
     private S3Service s3Service;
     private PhotoMapper photoMapper;
@@ -38,7 +40,7 @@ public class PhotoService {
     }
 
     public PhotoModel upload(MultipartFile file, String description, String userEmail) {
-
+        logger.info("Uploading photo for user with email {}", userEmail);
         String S3address = "";
         S3address = s3Service.putObject(file);
 
@@ -54,13 +56,12 @@ public class PhotoService {
         photoRepository.save(photo);
         emailService.sendPhotoUploadedToS3(user,photo);
 
-
         PhotoModel photoModel = photoMapper.from(photo);
         return photoModel;
     }
 
     public PhotoModel findPhotoById(Long id) {
-
+        logger.info("Finding photo by ID {}", id);
         PhotoEntity photoEntity = photoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Photo with ID :" + id + " Not Found"));
         PhotoModel photoModel = photoMapper.from(photoEntity);
@@ -69,7 +70,7 @@ public class PhotoService {
     }
 
     public List<PhotoModel> findPendingPhotos() {
-
+        logger.info("Finding all pending photos");
         List<PhotoEntity> allPendingPhotos = photoRepository.findByStatus(Status.PENDING);
         List<PhotoModel> photoModelList = allPendingPhotos.stream()
                 .map(photoMapper::from)
@@ -79,7 +80,7 @@ public class PhotoService {
     }
 
     public List<PhotoModel> findPhotosByUser(Long id) {
-
+        logger.info("Finding photos by user with ID {}", id);
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with ID :" + id + " Not Found"));
         List<PhotoEntity> allUserPhotos = photoRepository.findByUser(user);
@@ -91,9 +92,8 @@ public class PhotoService {
         return photoModelList;
     }
 
-
     public ResponseEntity<byte[]> downloadPhoto(Long id) throws UnsupportedEncodingException {
-
+        logger.info("Downloading photo with ID {}", id);
         PhotoEntity photoEntity = photoRepository.findById(id).orElseThrow();
         String key = photoEntity.getObjectKey();
         byte[] data = s3Service.getObjectBytes(key);
@@ -107,7 +107,7 @@ public class PhotoService {
     }
 
     public void deletePhoto(Long id) {
-
+        logger.info("Deleting photo with ID {}", id);
         photoRepository.deleteById(id);
     }
 }

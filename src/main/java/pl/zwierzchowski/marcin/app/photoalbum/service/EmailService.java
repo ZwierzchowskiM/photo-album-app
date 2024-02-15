@@ -24,7 +24,7 @@ import java.util.Map;
 @Service
 public class EmailService {
 
-    private static final Logger logger = LoggerFactory.getLogger(GooglePhotosAlbumService.class);
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
     @Value("${spring.mail.username}")
     private String sender;
@@ -52,6 +52,8 @@ public class EmailService {
         helper.setText(html, true);
 
         emailSender.send(message);
+
+        logger.info("Email sent successfully to {}", email.getTo());
     }
 
     private Email createEmailPhotoUploaded(UserEntity user, PhotoEntity photo) {
@@ -73,9 +75,10 @@ public class EmailService {
     public void sendPhotoUploadedToS3(UserEntity user, PhotoEntity photo) {
         Email email = createEmailPhotoUploaded(user, photo);
         try {
+            logger.info("Sending email to {}", user.getEmail());
             sendMail(email);
         } catch (MessagingException e) {
-            logger.info("sending email failed");
+            logger.error("Error while sending email to {}", user.getEmail(), e);
         }
 
     }
@@ -88,7 +91,7 @@ public class EmailService {
 
         email.setTo(user.getEmail());
         email.setFrom(sender);
-        email.setSubject("Photo reveiwed");
+        email.setSubject("Photo reviewed");
         email.setTemplate("photo-reviewed-accepted.html");
 
         Map<String, Object> properties = new HashMap<>();
@@ -109,7 +112,7 @@ public class EmailService {
 
         email.setTo(user.getEmail());
         email.setFrom(sender);
-        email.setSubject("Photo reveiwed");
+        email.setSubject("Photo reviewed");
         email.setTemplate("photo-reviewed-rejected.html");
 
         Map<String, Object> properties = new HashMap<>();
@@ -132,9 +135,10 @@ public class EmailService {
         }
 
         try {
+            logger.info("Sending photo review result email to {}", email.getTo());
             sendMail(email);
         } catch (MessagingException e) {
-            logger.info("sending email failed");
+            logger.error("Error while sending photo review result email to {}", email.getTo(), e);
         }
 
     }
